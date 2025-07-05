@@ -1,0 +1,14 @@
+type Query {
+    user(id: ID!): User
+}
+
+"""
+ユーザー
+"""
+type User {
+    id: ID!
+    """
+    ユーザー名
+    """
+    name: String!
+}
