@@ -12,4 +12,7 @@ class UserRepository {
     )
 
     fun findById(id: Long): User? = data.find { it.id == id }
+
+    fun findAll(): List<User> = data
+
 }

@@ -8,8 +8,13 @@ import org.springframework.stereotype.Controller
 
 @Controller
 class GraphQLController(private val userRepository: UserRepository) {
-    @QueryMapping("user")
+    @QueryMapping
     fun user(@Argument id: Long): User? {
         return userRepository.findById(id)
+    }
+
+    @QueryMapping
+    fun users(): List<User> {
+        return userRepository.findAll()
     }
 }
