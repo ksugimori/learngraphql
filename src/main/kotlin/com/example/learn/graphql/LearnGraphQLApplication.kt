@@ -1,11 +1,11 @@
-package com.example.learngraphql
+package com.example.learn.graphql
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class LearngraphqlApplication
+class LearnGraphQLApplication
 
 fun main(args: Array<String>) {
-	runApplication<LearngraphqlApplication>(*args)
+	runApplication<LearnGraphQLApplication>(*args)
 }
