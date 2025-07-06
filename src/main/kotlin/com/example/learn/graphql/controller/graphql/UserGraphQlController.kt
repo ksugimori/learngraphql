@@ -10,7 +10,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class UserGraphQLController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
+class UserGraphQlController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
     /**
      * user クエリのハンドリング
      *

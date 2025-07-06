@@ -9,4 +9,10 @@ import org.apache.ibatis.annotations.Select
 interface ToDoMapper {
     @Select("SELECT * FROM todos WHERE user_id = #{userId}")
     fun findByUserId(@Param("userId") userId: Long): List<ToDo>
+
+    @Select("SELECT * FROM todos WHERE id = #{id}")
+    fun findById(@Param("id") id: Long): ToDo?
+
+    @Select("SELECT * FROM todos")
+    fun findAll(): List<ToDo>
 }

@@ -1,6 +1,9 @@
 type Query {
-    user(id: ID!): User
     users: [User!]
+    user(id: ID!): User
+
+    todos: [ToDo!]
+    todo(id: ID!): ToDo
 }
 
 """
@@ -30,4 +33,9 @@ type ToDo {
     説明
     """
     summary: String!
+
+    """
+    ユーザーID
+    """
+    userId: String!
 }
