@@ -1,4 +1,4 @@
-package com.example.learn.graphql.controller
+package com.example.learn.graphql.controller.graphql
 
 import com.example.learn.graphql.dto.ToDo
 import com.example.learn.graphql.dto.User
@@ -10,11 +10,11 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class GraphQLController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
+class UserGraphQLController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
     /**
      * user クエリのハンドリング
      *
-     * [QueryMapping] でクエリを処理するメソッドを紐づけ。引数は [Argument] でマッピング
+     * [org.springframework.graphql.data.method.annotation.QueryMapping] でクエリを処理するメソッドを紐づけ。引数は [org.springframework.graphql.data.method.annotation.Argument] でマッピング
      */
     @QueryMapping
     fun user(@Argument id: Long): User? {
