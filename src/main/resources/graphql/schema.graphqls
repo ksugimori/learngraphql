@@ -8,8 +8,26 @@ type Query {
 """
 type User {
     id: ID!
+
     """
     ユーザー名
     """
     name: String!
+
+    """
+    タスク一覧
+    """
+    todos: [ToDo!]
+}
+
+"""
+タスク
+"""
+type ToDo {
+    id: ID!
+
+    """
+    説明
+    """
+    summary: String!
 }

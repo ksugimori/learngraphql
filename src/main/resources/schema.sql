@@ -2,3 +2,10 @@ CREATE TABLE users (
     id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
+
+CREATE TABLE todos (
+    id BIGINT NOT NULL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    summary VARCHAR(100) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
