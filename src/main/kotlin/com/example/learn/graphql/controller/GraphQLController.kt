@@ -11,6 +11,11 @@ import org.springframework.stereotype.Controller
 
 @Controller
 class GraphQLController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
+    /**
+     * user クエリのハンドリング
+     *
+     * [QueryMapping] でクエリを処理するメソッドを紐づけ。引数は [Argument] でマッピング
+     */
     @QueryMapping
     fun user(@Argument id: Long): User? {
         return userMapper.findById(id)
@@ -21,7 +26,29 @@ class GraphQLController(private val userMapper: UserMapper, private val toDoMapp
         return userMapper.findAll()
     }
 
-    @SchemaMapping
+    /**
+     * ネストした型のマッピング。
+     *
+     * 例：GraphQL スキーマが次の内容で、
+     * ```
+     * type User {
+     *   todos: [ToDo!]
+     * }
+     * ```
+     * 次のようなクエリを受け取ったときに呼ばれる
+     * ```
+     * query {
+     *   users {
+     *     todos {
+     *       summary
+     *     }
+     *   }
+     * }
+     * ```
+     *
+     * 引数の型とメソッド名で自動的にマッピングされるので typeName と field は省略可能。
+     */
+    @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: User): List<ToDo> {
         return toDoMapper.findByUserId(parent.id)
     }
