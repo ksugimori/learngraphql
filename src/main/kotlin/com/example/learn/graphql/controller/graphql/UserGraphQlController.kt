@@ -50,6 +50,7 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      */
     @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: User): List<ToDo> {
+        checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
         return toDoMapper.findByUserId(parent.id)
     }
 }
