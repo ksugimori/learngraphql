@@ -6,6 +6,28 @@ type Query {
     todo(id: ID!): ToDo
 }
 
+type Mutation {
+    createUser(request: CreateUserRequest): User
+    createToDo(request: CreateToDoRequest): ToDo
+}
+
+"""
+ユーザー作成のリクエスト
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateUserRequest {
+    name: String!
+}
+
+"""
+ToDo作成のリクエスト
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateToDoRequest {
+    userId: ID!
+    summary: String
+}
+
 """
 ユーザー
 """

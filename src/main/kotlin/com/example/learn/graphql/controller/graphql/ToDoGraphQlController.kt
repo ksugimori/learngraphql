@@ -4,6 +4,7 @@ import com.example.learn.graphql.dto.ToDo
 import com.example.learn.graphql.mapper.ToDoMapper
 import com.example.learn.graphql.mapper.UserMapper
 import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
@@ -19,4 +20,15 @@ class ToDoGraphQlController(private val userMapper: UserMapper, private val toDo
         return toDoMapper.findAll()
     }
 
+    @MutationMapping
+    fun createToDo(@Argument request: ToDo): ToDo {
+        val todo = ToDo(
+            id = null,
+            userId = request.userId,
+            summary = request.summary
+        )
+
+        toDoMapper.create(todo)
+        return todo
+    }
 }

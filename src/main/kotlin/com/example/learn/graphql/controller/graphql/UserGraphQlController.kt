@@ -5,9 +5,12 @@ import com.example.learn.graphql.dto.User
 import com.example.learn.graphql.mapper.ToDoMapper
 import com.example.learn.graphql.mapper.UserMapper
 import org.springframework.graphql.data.method.annotation.Argument
+import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
+
+data class CreateUserRequest(val name: String)
 
 @Controller
 class UserGraphQlController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
@@ -52,5 +55,16 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
     fun todos(parent: User): List<ToDo> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
         return toDoMapper.findByUserId(parent.id)
+    }
+
+    @MutationMapping
+    fun createUser(@Argument request: User): User {
+        val user = User(
+            id = null,
+            name = request.name
+        )
+
+        userMapper.create(user)
+        return user
     }
 }
