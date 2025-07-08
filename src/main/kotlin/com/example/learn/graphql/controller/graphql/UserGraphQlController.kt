@@ -43,7 +43,8 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      * query {
      *   users {
      *     todos {
-     *       summary
+     *       title
+     *       description
      *     }
      *   }
      * }

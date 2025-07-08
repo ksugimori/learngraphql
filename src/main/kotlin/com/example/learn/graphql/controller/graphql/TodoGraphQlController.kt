@@ -25,7 +25,8 @@ class TodoGraphQlController(private val userMapper: UserMapper, private val todo
         val todo = Todo(
             id = null,
             userId = request.userId,
-            summary = request.summary
+            title = request.title,
+            description = request.description
         )
 
         todoMapper.create(todo)

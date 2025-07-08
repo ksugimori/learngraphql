@@ -6,6 +6,7 @@ CREATE TABLE users (
 CREATE TABLE todos (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
-    summary VARCHAR(100) NOT NULL,
+    title VARCHAR(30) NOT NULL,
+    description VARCHAR(100),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

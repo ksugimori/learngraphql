@@ -18,7 +18,7 @@ interface TodoMapper {
     @Select("SELECT * FROM todos")
     fun findAll(): List<Todo>
 
-    @Insert("INSERT INTO todos (user_id, summary) VALUES (#{userId}, #{summary})")
+    @Insert("INSERT INTO todos (user_id, title, description) VALUES (#{userId}, #{title}, #{description})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     fun create(todo: Todo)
 }

@@ -25,7 +25,8 @@ IDは自動採番されるのでそれ以外の項目のみ。
 """
 input CreateTodoRequest {
     userId: ID!
-    summary: String
+    title: String!
+    description: String
 }
 
 """
@@ -52,12 +53,17 @@ type Todo {
     id: ID!
 
     """
-    説明
-    """
-    summary: String!
-
-    """
     ユーザーID
     """
     userId: String!
+
+    """
+    タイトル
+    """
+    title: String!
+
+    """
+    詳細
+    """
+    description: String
 }
