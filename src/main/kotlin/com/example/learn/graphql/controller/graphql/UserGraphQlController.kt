@@ -1,8 +1,8 @@
 package com.example.learn.graphql.controller.graphql
 
-import com.example.learn.graphql.dto.ToDo
+import com.example.learn.graphql.dto.Todo
 import com.example.learn.graphql.dto.User
-import com.example.learn.graphql.mapper.ToDoMapper
+import com.example.learn.graphql.mapper.TodoMapper
 import com.example.learn.graphql.mapper.UserMapper
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller
 data class CreateUserRequest(val name: String)
 
 @Controller
-class UserGraphQlController(private val userMapper: UserMapper, private val toDoMapper: ToDoMapper) {
+class UserGraphQlController(private val userMapper: UserMapper, private val toDoMapper: TodoMapper) {
     /**
      * user クエリのハンドリング
      *
@@ -35,7 +35,7 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      * 例：GraphQL スキーマが次の内容で、
      * ```
      * type User {
-     *   todos: [ToDo!]
+     *   todos: [Todo!]
      * }
      * ```
      * 次のようなクエリを受け取ったときに呼ばれる
@@ -52,7 +52,7 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      * 引数の型とメソッド名で自動的にマッピングされるので typeName と field は省略可能。
      */
     @SchemaMapping(typeName = "User", field = "todos")
-    fun todos(parent: User): List<ToDo> {
+    fun todos(parent: User): List<Todo> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
         return toDoMapper.findByUserId(parent.id)
     }

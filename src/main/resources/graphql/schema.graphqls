@@ -2,13 +2,13 @@ type Query {
     users: [User!]
     user(id: ID!): User
 
-    todos: [ToDo!]
-    todo(id: ID!): ToDo
+    todos: [Todo!]
+    todo(id: ID!): Todo
 }
 
 type Mutation {
     createUser(request: CreateUserRequest): User
-    createToDo(request: CreateToDoRequest): ToDo
+    createTodo(request: CreateTodoRequest): Todo
 }
 
 """
@@ -20,10 +20,10 @@ input CreateUserRequest {
 }
 
 """
-ToDo作成のリクエスト
+Todo作成のリクエスト
 IDは自動採番されるのでそれ以外の項目のみ。
 """
-input CreateToDoRequest {
+input CreateTodoRequest {
     userId: ID!
     summary: String
 }
@@ -42,13 +42,13 @@ type User {
     """
     タスク一覧
     """
-    todos: [ToDo!]
+    todos: [Todo!]
 }
 
 """
 タスク
 """
-type ToDo {
+type Todo {
     id: ID!
 
     """
