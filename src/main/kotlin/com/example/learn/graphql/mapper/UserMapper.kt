@@ -10,12 +10,12 @@ import org.apache.ibatis.annotations.Select
 @Mapper
 interface UserMapper {
     @Select("SELECT * FROM users WHERE id = #{id}")
-    fun findById(@Param("id") id: Long): User?
+    fun selectById(@Param("id") id: Long): User?
 
     @Select("SELECT * FROM users")
-    fun findAll(): List<User>
+    fun selectAll(): List<User>
 
     @Insert("INSERT INTO users (name) VALUES (#{name})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    fun create(user: User)
+    fun insert(user: User)
 }

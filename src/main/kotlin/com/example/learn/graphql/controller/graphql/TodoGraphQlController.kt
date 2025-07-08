@@ -12,12 +12,12 @@ import org.springframework.stereotype.Controller
 class TodoGraphQlController(private val userMapper: UserMapper, private val todoMapper: TodoMapper) {
     @QueryMapping
     fun todo(@Argument id: Long): Todo? {
-        return todoMapper.findById(id)
+        return todoMapper.selectById(id)
     }
 
     @QueryMapping
     fun todos(): List<Todo> {
-        return todoMapper.findAll()
+        return todoMapper.selectAll()
     }
 
     @MutationMapping
@@ -29,7 +29,7 @@ class TodoGraphQlController(private val userMapper: UserMapper, private val todo
             description = request.description
         )
 
-        todoMapper.create(todo)
+        todoMapper.insert(todo)
         return todo
     }
 }

@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController
 class UserRestController(private val userMapper: UserMapper) {
     @GetMapping
     fun findAll(): List<User> {
-        return userMapper.findAll()
+        return userMapper.selectAll()
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody user: User): User {
-        userMapper.create(user)
+        userMapper.insert(user)
 
         return user
     }
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): User? {
-        return userMapper.findById(id)
+        return userMapper.selectById(id)
     }
 }

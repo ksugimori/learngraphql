@@ -17,18 +17,18 @@ class TodoRestController(private val toDoMapper: TodoMapper) {
 
     @GetMapping
     fun findAll(): List<Todo> {
-        return toDoMapper.findAll()
+        return toDoMapper.selectAll()
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody todo: Todo): Todo {
-        toDoMapper.create(todo)
+        toDoMapper.insert(todo)
         return todo
     }
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): Todo? {
-        return toDoMapper.findById(id)
+        return toDoMapper.selectById(id)
     }
 }

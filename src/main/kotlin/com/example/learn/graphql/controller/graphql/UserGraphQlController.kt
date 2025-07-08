@@ -21,12 +21,12 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      */
     @QueryMapping
     fun user(@Argument id: Long): User? {
-        return userMapper.findById(id)
+        return userMapper.selectById(id)
     }
 
     @QueryMapping
     fun users(): List<User> {
-        return userMapper.findAll()
+        return userMapper.selectAll()
     }
 
     /**
@@ -55,7 +55,7 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
     @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: User): List<Todo> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        return toDoMapper.findByUserId(parent.id)
+        return toDoMapper.selectByUserId(parent.id)
     }
 
     @MutationMapping
@@ -65,7 +65,7 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
             name = request.name
         )
 
-        userMapper.create(user)
+        userMapper.insert(user)
         return user
     }
 }
