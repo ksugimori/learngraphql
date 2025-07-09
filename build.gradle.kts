@@ -30,6 +30,8 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
+	// https://mvnrepository.com/artifact/org.mockito.kotlin/mockito-kotlin
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
