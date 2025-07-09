@@ -1,69 +1,8 @@
-type Query {
-    users: [User!]
-    user(id: ID!): User
+# このファイルでは共通的に利用する型などを定義
+# 分割したファイルでは Query や Mutation を extend する
 
-    todos: [Todo!]
-    todo(id: ID!): Todo
-}
+# Spring for GraphQL は .graphqls ファイルをすべて読み込むので
+# ファイル名は何でも良いが、慣習的に schema.graphqls が使われるらしい
 
-type Mutation {
-    createUser(request: CreateUserRequest): User
-    createTodo(request: CreateTodoRequest): Todo
-}
-
-"""
-ユーザー作成のリクエスト
-IDは自動採番されるのでそれ以外の項目のみ。
-"""
-input CreateUserRequest {
-    name: String!
-}
-
-"""
-Todo作成のリクエスト
-IDは自動採番されるのでそれ以外の項目のみ。
-"""
-input CreateTodoRequest {
-    userId: ID!
-    title: String!
-    description: String
-}
-
-"""
-ユーザー
-"""
-type User {
-    id: ID!
-
-    """
-    ユーザー名
-    """
-    name: String!
-
-    """
-    タスク一覧
-    """
-    todos: [Todo!]
-}
-
-"""
-タスク
-"""
-type Todo {
-    id: ID!
-
-    """
-    ユーザーID
-    """
-    userId: String!
-
-    """
-    タイトル
-    """
-    title: String!
-
-    """
-    詳細
-    """
-    description: String
-}
+type Query
+type Mutation

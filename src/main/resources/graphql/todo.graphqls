@@ -1,0 +1,40 @@
+"""
+タスク
+"""
+type Todo {
+    id: ID!
+
+    """
+    ユーザーID
+    """
+    userId: String!
+
+    """
+    タイトル
+    """
+    title: String!
+
+    """
+    詳細
+    """
+    description: String
+}
+
+"""
+Todo作成のリクエスト
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateTodoRequest {
+    userId: ID!
+    title: String!
+    description: String
+}
+
+extend type Query {
+    todos: [Todo!]
+    todo(id: ID!): Todo
+}
+
+extend type Mutation {
+    createTodo(request: CreateTodoRequest): Todo
+}

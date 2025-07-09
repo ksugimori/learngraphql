@@ -1,0 +1,34 @@
+"""
+ユーザー
+"""
+type User {
+    id: ID!
+
+    """
+    ユーザー名
+    """
+    name: String!
+
+    """
+    タスク一覧
+    """
+    todos: [Todo!]
+}
+
+"""
+ユーザー作成のリクエスト
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateUserRequest {
+    name: String!
+}
+
+extend type Query {
+    users: [User!]
+    user(id: ID!): User
+
+}
+
+extend type Mutation {
+    createUser(request: CreateUserRequest): User
+}
