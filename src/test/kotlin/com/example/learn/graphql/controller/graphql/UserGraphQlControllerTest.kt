@@ -4,10 +4,7 @@ import com.example.learn.graphql.dto.Todo
 import com.example.learn.graphql.dto.User
 import com.example.learn.graphql.mapper.TodoMapper
 import com.example.learn.graphql.mapper.UserMapper
-import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
@@ -29,10 +26,10 @@ class UserGraphQlControllerTest() {
 
     @Test
     fun `query - user - TODO が紐づかない場合`() {
-        whenever(userMapper.selectById(any())).thenReturn(User(id = 1, name = "Test User"))
-        whenever(todoMapper.selectByUserId(any())).thenReturn(emptyList())
+        whenever(userMapper.selectById(eq(1))).thenReturn(User(id = 1, name = "Test User"))
+        whenever(todoMapper.selectByUserId(eq(1))).thenReturn(emptyList())
 
-        val query = """
+        val document = """
             query {
                 user(id: "1") {
                     id
@@ -54,17 +51,14 @@ class UserGraphQlControllerTest() {
                 }
             """.trimIndent()
 
-        graphQlTester.document(query).execute()
+        graphQlTester.document(document).execute()
             .path("user").matchesJson(expectedUser)
-
-        verify(userMapper, times(1)).selectById(eq(1))
-        verify(todoMapper, times(1)).selectByUserId(eq(1))
     }
 
     @Test
     fun `query - user - TODO が紐づいている場合`() {
-        whenever(userMapper.selectById(any())).thenReturn(User(id = 111, name = "Test User"))
-        whenever(todoMapper.selectByUserId(any())).thenReturn(
+        whenever(userMapper.selectById(eq(111))).thenReturn(User(id = 111, name = "Test User"))
+        whenever(todoMapper.selectByUserId(eq(111))).thenReturn(
             listOf(
                 Todo(
                     id = 222,
@@ -75,7 +69,7 @@ class UserGraphQlControllerTest() {
             )
         )
 
-        val query = """
+        val document = """
             query {
                 user(id: "111") {
                     id
@@ -103,10 +97,65 @@ class UserGraphQlControllerTest() {
                 }
             """.trimIndent()
 
-        graphQlTester.document(query).execute()
+        graphQlTester.document(document).execute()
             .path("user").matchesJson(expectedUser)
+    }
 
-        verify(userMapper, times(1)).selectById(eq(111))
-        verify(todoMapper, times(1)).selectByUserId(eq(111))
+    @Test
+    fun `query - users`() {
+        whenever(userMapper.selectAll()).thenReturn(
+            listOf(
+                User(id = 111, name = "ひとりめ"),
+                User(id = 222, name = "ふたりめ"),
+            )
+        )
+        whenever(todoMapper.selectByUserId(eq(111))).thenReturn(
+            listOf(
+                Todo(
+                    id = 999,
+                    userId = 111,
+                    title = "test-title",
+                    description = "test-description"
+                )
+            )
+        )
+
+        val document = """
+            query {
+                users {
+                    id
+                    name
+                    todos {
+                        id
+                        title
+                        description
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val expectedUser = """
+            [
+                {
+                    "id": "111",
+                    "name": "ひとりめ",
+                    "todos": [
+                        {
+                            "id": "999",
+                            "title": "test-title",
+                            "description": "test-description"
+                        }
+                    ]
+                },
+                {
+                    "id": "222",
+                    "name": "ふたりめ",
+                    "todos": []
+                }
+            ]
+            """.trimIndent()
+
+        graphQlTester.document(document).execute()
+            .path("users").matchesJson(expectedUser)
     }
 }
