@@ -20,8 +20,9 @@ class TodoGraphQlControllerTest {
 
     @Test
     fun `query - todo`() {
-        whenever(todoMapper.selectById(eq(1)))
-            .thenReturn(Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"))
+        whenever(todoMapper.selectById(eq(1))).thenReturn(
+            Todo(id = 999, userId = 1, title = "かいもの", description = "えんぴつを買う"),
+        )
 
         val document = """
             query {
@@ -34,12 +35,13 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
+        // NOTE: ID 型は必ず String としてシリアライズされる。ID が必ず String なのは GraphQL の 仕様。
         val expected = """
             {
-                "id": "1",
-                "userId": "100",
-                "title": "ひとつめ",
-                "description": "ひとつめの詳細"
+                "id": "999",
+                "userId": "1",
+                "title": "かいもの",
+                "description": "えんぴつを買う"
             }
         """.trimIndent()
 
