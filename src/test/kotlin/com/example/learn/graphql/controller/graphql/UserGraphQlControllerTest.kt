@@ -28,11 +28,11 @@ class UserGraphQlControllerTest() {
     private lateinit var todoMapper: TodoMapper
 
     @Test
-    fun `TODO が紐づかない場合`() {
+    fun `query - user - TODO が紐づかない場合`() {
         whenever(userMapper.selectById(any())).thenReturn(User(id = 1, name = "Test User"))
         whenever(todoMapper.selectByUserId(any())).thenReturn(emptyList())
 
-        val document = """
+        val query = """
             query {
                 user(id: "1") {
                     id
@@ -44,26 +44,25 @@ class UserGraphQlControllerTest() {
                     }
                 }
             }
-        """
+        """.trimIndent()
 
-        graphQlTester.document(document)
-            .execute()
-            .path("user").matchesJson(
-                """
+        val expectedUser = """
                 {
                     "id": "1",
                     "name": "Test User",
                     "todos": []
                 }
             """.trimIndent()
-            )
+
+        graphQlTester.document(query).execute()
+            .path("user").matchesJson(expectedUser)
 
         verify(userMapper, times(1)).selectById(eq(1))
         verify(todoMapper, times(1)).selectByUserId(eq(1))
     }
 
     @Test
-    fun `TODO が紐づいている場合`() {
+    fun `query - user - TODO が紐づいている場合`() {
         whenever(userMapper.selectById(any())).thenReturn(User(id = 111, name = "Test User"))
         whenever(todoMapper.selectByUserId(any())).thenReturn(
             listOf(
@@ -76,7 +75,7 @@ class UserGraphQlControllerTest() {
             )
         )
 
-        val document = """
+        val query = """
             query {
                 user(id: "111") {
                     id
@@ -88,11 +87,9 @@ class UserGraphQlControllerTest() {
                     }
                 }
             }
-        """
+        """.trimIndent()
 
-        graphQlTester.document(document)
-            .execute().path("user").matchesJson(
-                """
+        val expectedUser = """
                 {
                     "id": "111",
                     "name": "Test User",
@@ -105,7 +102,9 @@ class UserGraphQlControllerTest() {
                     ]
                 }
             """.trimIndent()
-            )
+
+        graphQlTester.document(query).execute()
+            .path("user").matchesJson(expectedUser)
 
         verify(userMapper, times(1)).selectById(eq(111))
         verify(todoMapper, times(1)).selectByUserId(eq(111))
