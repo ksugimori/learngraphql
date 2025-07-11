@@ -1,7 +1,7 @@
 package com.example.learn.graphql.controller.rest
 
 import com.example.learn.graphql.dto.Todo
-import com.example.learn.graphql.mapper.TodoMapper
+import com.example.learn.graphql.repository.TodoRepository
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,22 +13,21 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/rest/todos")
 @RestController
-class TodoRestController(private val toDoMapper: TodoMapper) {
+class TodoRestController(private val todoRepository: TodoRepository) {
 
     @GetMapping
     fun findAll(): List<Todo> {
-        return toDoMapper.selectAll()
+        return todoRepository.findAll()
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody todo: Todo): Todo {
-        toDoMapper.insert(todo)
-        return todo
+        return todoRepository.save(todo)
     }
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): Todo? {
-        return toDoMapper.selectById(id)
+        return todoRepository.findById(id).orElse(null)
     }
 }

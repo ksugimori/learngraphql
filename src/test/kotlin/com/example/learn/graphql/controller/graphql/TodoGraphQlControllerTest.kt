@@ -1,13 +1,14 @@
 package com.example.learn.graphql.controller.graphql
 
 import com.example.learn.graphql.dto.Todo
-import com.example.learn.graphql.mapper.TodoMapper
+import com.example.learn.graphql.repository.TodoRepository
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.graphql.test.tester.GraphQlTester
 import org.springframework.test.context.bean.override.mockito.MockitoBean
+import java.util.*
 import kotlin.test.Test
 
 @GraphQlTest(TodoGraphQlController::class)
@@ -16,12 +17,14 @@ class TodoGraphQlControllerTest {
     private lateinit var graphQlTester: GraphQlTester
 
     @MockitoBean
-    private lateinit var todoMapper: TodoMapper
+    private lateinit var todoRepository: TodoRepository
 
     @Test
     fun `query - todo`() {
-        whenever(todoMapper.selectById(eq(1))).thenReturn(
-            Todo(id = 999, userId = 1, title = "かいもの", description = "えんぴつを買う"),
+        whenever(todoRepository.findById(eq(1))).thenReturn(
+            Optional.of(
+                Todo(id = 999, userId = 1, title = "かいもの", description = "えんぴつを買う"),
+            )
         )
 
         val document = """
@@ -50,7 +53,7 @@ class TodoGraphQlControllerTest {
 
     @Test
     fun `query - todos`() {
-        whenever(todoMapper.selectAll())
+        whenever(todoRepository.findAll())
             .thenReturn(
                 listOf(
                     Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"),

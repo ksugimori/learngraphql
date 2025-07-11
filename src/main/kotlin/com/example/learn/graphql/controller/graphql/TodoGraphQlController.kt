@@ -1,22 +1,22 @@
 package com.example.learn.graphql.controller.graphql
 
 import com.example.learn.graphql.dto.Todo
-import com.example.learn.graphql.mapper.TodoMapper
+import com.example.learn.graphql.repository.TodoRepository
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class TodoGraphQlController(private val todoMapper: TodoMapper) {
+class TodoGraphQlController(private val todoMapper: TodoRepository) {
     @QueryMapping
     fun todo(@Argument id: Long): Todo? {
-        return todoMapper.selectById(id)
+        return todoMapper.findById(id).orElse(null)
     }
 
     @QueryMapping
     fun todos(): List<Todo> {
-        return todoMapper.selectAll()
+        return todoMapper.findAll()
     }
 
     @MutationMapping
@@ -28,7 +28,6 @@ class TodoGraphQlController(private val todoMapper: TodoMapper) {
             description = request.description
         )
 
-        todoMapper.insert(todo)
-        return todo
+        return todoMapper.save(todo)
     }
 }

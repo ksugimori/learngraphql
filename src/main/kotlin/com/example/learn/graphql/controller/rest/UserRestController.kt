@@ -1,7 +1,7 @@
 package com.example.learn.graphql.controller.rest
 
 import com.example.learn.graphql.dto.User
-import com.example.learn.graphql.mapper.UserMapper
+import com.example.learn.graphql.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,22 +13,20 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/rest/users")
 @RestController
-class UserRestController(private val userMapper: UserMapper) {
+class UserRestController(private val userRepository: UserRepository) {
     @GetMapping
     fun findAll(): List<User> {
-        return userMapper.selectAll()
+        return userRepository.findAll()
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody user: User): User {
-        userMapper.insert(user)
-
-        return user
+        return userRepository.save(user)
     }
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): User? {
-        return userMapper.selectById(id)
+        return userRepository.findById(id).orElse(null)
     }
 }

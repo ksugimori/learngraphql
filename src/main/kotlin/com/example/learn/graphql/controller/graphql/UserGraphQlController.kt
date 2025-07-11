@@ -2,8 +2,8 @@ package com.example.learn.graphql.controller.graphql
 
 import com.example.learn.graphql.dto.Todo
 import com.example.learn.graphql.dto.User
-import com.example.learn.graphql.mapper.TodoMapper
-import com.example.learn.graphql.mapper.UserMapper
+import com.example.learn.graphql.repository.TodoRepository
+import com.example.learn.graphql.repository.UserRepository
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller
 data class CreateUserRequest(val name: String)
 
 @Controller
-class UserGraphQlController(private val userMapper: UserMapper, private val toDoMapper: TodoMapper) {
+class UserGraphQlController(private val userRepository: UserRepository, private val toDoRepository: TodoRepository) {
     /**
      * user クエリのハンドリング
      *
@@ -21,12 +21,12 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
      */
     @QueryMapping
     fun user(@Argument id: Long): User? {
-        return userMapper.selectById(id)
+        return userRepository.findById(id).orElse(null)
     }
 
     @QueryMapping
     fun users(): List<User> {
-        return userMapper.selectAll()
+        return userRepository.findAll()
     }
 
     /**
@@ -55,17 +55,11 @@ class UserGraphQlController(private val userMapper: UserMapper, private val toDo
     @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: User): List<Todo> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        return toDoMapper.selectByUserId(parent.id)
+        return toDoRepository.findByUserId(parent.id)
     }
 
     @MutationMapping
     fun createUser(@Argument request: User): User {
-        val user = User(
-            id = null,
-            name = request.name
-        )
-
-        userMapper.insert(user)
-        return user
+        return userRepository.save(request)
     }
 }
