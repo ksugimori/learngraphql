@@ -4,9 +4,11 @@ import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -30,5 +32,16 @@ class TodoRestController(private val todoRepository: TodoRepository) {
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): Todo? {
         return todoRepository.findByIdOrNull(id)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody todo: Todo): Todo {
+        return todoRepository.save(todo)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Long) {
+        todoRepository.deleteById(id)
     }
 }

@@ -4,9 +4,11 @@ import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -29,5 +31,16 @@ class UserRestController(private val userRepository: UserRepository) {
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): User? {
         return userRepository.findByIdOrNull(id)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody user: User): User {
+        return userRepository.save(user)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Long) {
+        userRepository.deleteById(id)
     }
 }

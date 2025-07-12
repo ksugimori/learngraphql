@@ -4,14 +4,17 @@ import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 import kotlin.test.Test
 
 @WebMvcTest(UserRestController::class)
@@ -88,4 +91,44 @@ class UserRestControllerTest {
         val expectedUser = User(id = null, name = "新規ユーザー")
         verify { userRepository.save(expectedUser) }
     }
+
+    @Test
+    fun `update - 正常系`() {
+        every { userRepository.save(any()) } answers { args[0] as User }
+
+        mockMvc.put("/api/rest/users/999") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """
+                {
+                    "id": 999,
+                    "name": "更新後の名前"
+                }
+            """.trimIndent()
+        }.andExpect {
+            status { isOk() }
+            content {
+                json(
+                    """
+                {
+                    "id": 999,
+                    "name": "更新後の名前"
+                }
+            """.trimIndent()
+                )
+            }
+        }
+
+        val expectedUser = User(id = 999, name = "更新後の名前")
+        verify { userRepository.save(expectedUser) }
+    }
+
+    @Test
+    fun `delete - 正常系`() {
+        justRun { userRepository.deleteById(any()) }
+
+        mockMvc.delete("/api/rest/users/999").andExpect { status { isNoContent() } }
+
+        verify { userRepository.deleteById(999) }
+    }
+
 }
