@@ -1,7 +1,8 @@
 package com.example.learn.graphql.controller.rest
 
-import com.example.learn.graphql.dto.User
+import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -27,6 +28,6 @@ class UserRestController(private val userRepository: UserRepository) {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): User? {
-        return userRepository.findById(id).orElse(null)
+        return userRepository.findByIdOrNull(id)
     }
 }

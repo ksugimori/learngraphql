@@ -1,4 +1,4 @@
-package com.example.learn.graphql.dto
+package com.example.learn.graphql.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

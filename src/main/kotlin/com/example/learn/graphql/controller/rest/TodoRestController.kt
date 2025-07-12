@@ -1,7 +1,8 @@
 package com.example.learn.graphql.controller.rest
 
-import com.example.learn.graphql.dto.Todo
+import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -28,6 +29,6 @@ class TodoRestController(private val todoRepository: TodoRepository) {
 
     @GetMapping("/{id}")
     fun findById(@PathVariable id: Long): Todo? {
-        return todoRepository.findById(id).orElse(null)
+        return todoRepository.findByIdOrNull(id)
     }
 }

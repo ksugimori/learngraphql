@@ -1,9 +1,10 @@
 package com.example.learn.graphql.controller.graphql
 
-import com.example.learn.graphql.dto.Todo
-import com.example.learn.graphql.dto.User
+import com.example.learn.graphql.entity.Todo
+import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
@@ -21,7 +22,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      */
     @QueryMapping
     fun user(@Argument id: Long): User? {
-        return userRepository.findById(id).orElse(null)
+        return userRepository.findByIdOrNull(id)
     }
 
     @QueryMapping

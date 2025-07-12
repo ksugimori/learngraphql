@@ -1,6 +1,6 @@
 package com.example.learn.graphql.repository
 
-import com.example.learn.graphql.dto.Todo
+import com.example.learn.graphql.entity.Todo
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface TodoRepository : JpaRepository<Todo, Long> {

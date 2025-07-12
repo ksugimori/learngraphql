@@ -1,14 +1,13 @@
 package com.example.learn.graphql.controller.graphql
 
-import com.example.learn.graphql.dto.Todo
+import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.whenever
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.test.tester.GraphQlTester
-import org.springframework.test.context.bean.override.mockito.MockitoBean
-import java.util.*
 import kotlin.test.Test
 
 @GraphQlTest(TodoGraphQlController::class)
@@ -16,16 +15,18 @@ class TodoGraphQlControllerTest {
     @Autowired
     private lateinit var graphQlTester: GraphQlTester
 
-    @MockitoBean
+    @MockkBean
     private lateinit var todoRepository: TodoRepository
 
     @Test
     fun `query - todo`() {
-        whenever(todoRepository.findById(eq(1))).thenReturn(
-            Optional.of(
-                Todo(id = 999, userId = 1, title = "かいもの", description = "えんぴつを買う"),
-            )
+        every { todoRepository.findByIdOrNull(eq(1)) } returns Todo(
+            id = 999,
+            userId = 1,
+            title = "かいもの",
+            description = "えんぴつを買う"
         )
+
 
         val document = """
             query {
@@ -53,13 +54,11 @@ class TodoGraphQlControllerTest {
 
     @Test
     fun `query - todos`() {
-        whenever(todoRepository.findAll())
-            .thenReturn(
-                listOf(
-                    Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"),
-                    Todo(id = 2, userId = 100, title = "ふたつめ", description = "ふたつめの詳細"),
-                )
-            )
+        every { todoRepository.findAll() } returns listOf(
+            Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"),
+            Todo(id = 2, userId = 100, title = "ふたつめ", description = "ふたつめの詳細"),
+        )
+
 
         val document = """
             query {
