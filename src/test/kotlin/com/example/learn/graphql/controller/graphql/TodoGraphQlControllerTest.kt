@@ -90,4 +90,36 @@ class TodoGraphQlControllerTest {
 
         graphQlTester.document(document).execute().path("todos").matchesJson(expected)
     }
+
+    @Test
+    fun `mutation - createTodo`() {
+        // ID の自動採番が行われた想定
+        every { todoRepository.save(any()) } answers { (args[0] as Todo).copy(id = 999) }
+
+        val document = """
+            mutation {
+                createTodo(request: {
+                    userId: "111",
+                    title: "テスト",
+                    description: "詳細"
+                }) {
+                    id
+                    userId
+                    title
+                    description
+                }
+            }
+        """.trimIndent()
+
+        val expected = """
+            {
+                "id": "999",
+                "userId": "111",
+                "title": "テスト",
+                "description": "詳細"
+            }
+        """.trimIndent()
+
+        graphQlTester.document(document).execute().path("createTodo").matchesJson(expected)
+    }
 }

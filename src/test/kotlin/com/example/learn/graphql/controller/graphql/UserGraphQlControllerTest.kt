@@ -19,15 +19,15 @@ class UserGraphQlControllerTest() {
     private lateinit var graphQlTester: GraphQlTester
 
     @MockkBean
-    private lateinit var userMapper: UserRepository
+    private lateinit var userRepository: UserRepository
 
     @MockkBean
-    private lateinit var todoMapper: TodoRepository
+    private lateinit var todoRepository: TodoRepository
 
     @Test
     fun `query - user - TODO が紐づかない場合`() {
-        every { userMapper.findByIdOrNull(eq(1)) } returns User(id = 1, name = "Test User")
-        every { todoMapper.findByUserId(eq(1)) } returns emptyList()
+        every { userRepository.findByIdOrNull(eq(1)) } returns User(id = 1, name = "Test User")
+        every { todoRepository.findByUserId(eq(1)) } returns emptyList()
 
         val document = """
             query {
@@ -57,8 +57,8 @@ class UserGraphQlControllerTest() {
 
     @Test
     fun `query - user - TODO が紐づいている場合`() {
-        every { userMapper.findByIdOrNull(eq(111)) } returns User(id = 111, name = "Test User")
-        every { todoMapper.findByUserId(eq(111)) } returns listOf(
+        every { userRepository.findByIdOrNull(eq(111)) } returns User(id = 111, name = "Test User")
+        every { todoRepository.findByUserId(eq(111)) } returns listOf(
             Todo(
                 id = 222,
                 userId = 111,
@@ -101,11 +101,11 @@ class UserGraphQlControllerTest() {
 
     @Test
     fun `query - users`() {
-        every { userMapper.findAll() } returns listOf(
+        every { userRepository.findAll() } returns listOf(
             User(id = 111, name = "ひとりめ"),
             User(id = 222, name = "ふたりめ"),
         )
-        every { todoMapper.findByUserId(eq(111)) } returns listOf(
+        every { todoRepository.findByUserId(eq(111)) } returns listOf(
             Todo(
                 id = 999,
                 userId = 111,
@@ -113,7 +113,7 @@ class UserGraphQlControllerTest() {
                 description = "test-description"
             )
         )
-        every { todoMapper.findByUserId(eq(222)) } returns emptyList()
+        every { todoRepository.findByUserId(eq(222)) } returns emptyList()
 
 
         val document = """
@@ -153,5 +153,30 @@ class UserGraphQlControllerTest() {
 
         graphQlTester.document(document).execute()
             .path("users").matchesJson(expectedUser)
+    }
+
+    @Test
+    fun `mutation - createUser`() {
+        every { userRepository.save(any()) } answers { (args[0] as User).copy(id = 999) }
+        every { todoRepository.findByUserId(any()) } returns emptyList()
+
+        val document = """
+            mutation {
+                createUser(request: { name: "テスト" }) {
+                    id
+                    name
+                }
+            }
+        """.trimIndent()
+
+        val expectedUser = """
+                {
+                    "id": "999",
+                    "name": "テスト"
+                }
+            """.trimIndent()
+
+        graphQlTester.document(document).execute()
+            .path("createUser").matchesJson(expectedUser)
     }
 }

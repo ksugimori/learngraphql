@@ -15,6 +15,12 @@ data class CreateUserRequest(val name: String)
 
 @Controller
 class UserGraphQlController(private val userRepository: UserRepository, private val toDoRepository: TodoRepository) {
+
+    @QueryMapping
+    fun users(): List<User> {
+        return userRepository.findAll()
+    }
+
     /**
      * user クエリのハンドリング
      *
@@ -23,11 +29,6 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     @QueryMapping
     fun user(@Argument id: Long): User? {
         return userRepository.findByIdOrNull(id)
-    }
-
-    @QueryMapping
-    fun users(): List<User> {
-        return userRepository.findAll()
     }
 
     /**

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Controller
 @Controller
 class TodoGraphQlController(private val todoMapper: TodoRepository) {
     @QueryMapping
-    fun todo(@Argument id: Long): Todo? {
-        return todoMapper.findByIdOrNull(id)
+    fun todos(): List<Todo> {
+        return todoMapper.findAll()
     }
 
     @QueryMapping
-    fun todos(): List<Todo> {
-        return todoMapper.findAll()
+    fun todo(@Argument id: Long): Todo? {
+        return todoMapper.findByIdOrNull(id)
     }
 
     @MutationMapping
@@ -31,4 +31,5 @@ class TodoGraphQlController(private val todoMapper: TodoRepository) {
 
         return todoMapper.save(todo)
     }
+
 }
