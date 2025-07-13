@@ -21,10 +21,10 @@ type Todo {
 }
 
 """
-Todo作成のリクエスト
+Todo作成の input
 IDは自動採番されるのでそれ以外の項目のみ。
 """
-input CreateTodoRequest {
+input CreateTodoInput {
     userId: ID!
     title: String!
     description: String
@@ -46,7 +46,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createTodo(request: CreateTodoRequest!): Todo!
+    createTodo(input: CreateTodoInput!): Todo!
     updateTodo(input: UpdateTodoInput!): Todo!
     deleteTodo(id: ID!): Boolean!
 }

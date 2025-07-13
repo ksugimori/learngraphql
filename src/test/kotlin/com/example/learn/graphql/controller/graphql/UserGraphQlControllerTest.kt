@@ -163,7 +163,7 @@ class UserGraphQlControllerTest() {
 
         val document = """
             mutation {
-                createUser(request: { name: "テスト" }) {
+                createUser(input: { name: "テスト" }) {
                     id
                     name
                 }

@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
@@ -11,8 +12,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
-
-data class CreateUserRequest(val name: String)
 
 @Controller
 class UserGraphQlController(private val userRepository: UserRepository, private val toDoRepository: TodoRepository) {
@@ -62,8 +61,9 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     }
 
     @MutationMapping
-    fun createUser(@Argument request: User): User {
-        return userRepository.save(request)
+    fun createUser(@Argument input: CreateUserInput): User {
+        val user = User(id = null, name = input.name)
+        return userRepository.save(user)
     }
 
     @MutationMapping

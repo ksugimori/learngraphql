@@ -99,7 +99,7 @@ class TodoGraphQlControllerTest {
 
         val document = """
             mutation {
-                createTodo(request: {
+                createTodo(input: {
                     userId: "111",
                     title: "テスト",
                     description: "詳細"

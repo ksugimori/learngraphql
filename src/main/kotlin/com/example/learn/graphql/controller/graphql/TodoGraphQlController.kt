@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.input.CreateTodoInput
 import com.example.learn.graphql.controller.graphql.input.UpdateTodoInput
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
@@ -22,12 +23,12 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     }
 
     @MutationMapping
-    fun createTodo(@Argument request: Todo): Todo {
+    fun createTodo(@Argument input: CreateTodoInput): Todo {
         val todo = Todo(
             id = null,
-            userId = request.userId,
-            title = request.title,
-            description = request.description
+            userId = input.userId,
+            title = input.title,
+            description = input.description
         )
 
         return todoRepository.save(todo)

@@ -16,10 +16,10 @@ type User {
 }
 
 """
-ユーザー作成のリクエスト。
+ユーザー作成の input
 IDは自動採番されるのでそれ以外の項目のみ。
 """
-input CreateUserRequest {
+input CreateUserInput {
     name: String!
 }
 
@@ -39,7 +39,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createUser(request: CreateUserRequest!): User
+    createUser(input: CreateUserInput!): User!
     updateUser(input: UpdateUserInput!): User!
     deleteUser(id: ID!): Boolean!
 }
