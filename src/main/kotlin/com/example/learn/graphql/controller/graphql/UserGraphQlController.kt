@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
@@ -64,4 +65,24 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     fun createUser(@Argument request: User): User {
         return userRepository.save(request)
     }
+
+    @MutationMapping
+    fun updateUser(@Argument input: UpdateUserInput): User {
+        val user = userRepository.findByIdOrNull(input.id) ?: TODO("404エラーにする")
+        return userRepository.save(user.updatedWith(input))
+    }
+
+    @MutationMapping
+    fun deleteUser(@Argument id: Long): Boolean {
+        return if (userRepository.existsById(id)) {
+            userRepository.deleteById(id)
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun User.updatedWith(input: UpdateUserInput): User = this.copy(
+        name = input.name ?: this.name
+    )
 }

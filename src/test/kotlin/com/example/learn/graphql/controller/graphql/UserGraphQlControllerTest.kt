@@ -6,6 +6,7 @@ import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.justRun
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.data.repository.findByIdOrNull
@@ -178,5 +179,51 @@ class UserGraphQlControllerTest() {
 
         graphQlTester.document(document).execute()
             .path("createUser").matchesJson(expectedUser)
+    }
+
+    @Test
+    fun `mutation - updateUser`() {
+        every { userRepository.findByIdOrNull(100) } returns User(id = 100, name = "更新前")
+        every { userRepository.save(any()) } answers { args[0] as User }
+
+        val document = """
+            mutation {
+                updateUser(input: { id: "100", name: "更新後の名前" }) {
+                    id
+                    name
+                }
+            }
+        """.trimIndent()
+
+        val expected = """
+                {
+                    "id": "100",
+                    "name": "更新後の名前"
+                }
+            """.trimIndent()
+
+        graphQlTester.document(document).execute()
+            .path("updateUser").matchesJson(expected)
+    }
+
+    @Test
+    fun `mutation - deleteUser`() {
+        every { userRepository.existsById(100) } returns true
+        justRun { userRepository.deleteById(100) }
+
+        val document = """
+            mutation {
+                deleteUser(id: "100")
+            }
+        """.trimIndent()
+
+        val expected = """
+                {
+                    "id": "100",
+                    "name": "更新後の名前"
+                }
+            """.trimIndent()
+
+        graphQlTester.document(document).execute().path("deleteUser").entity(Boolean::class.java).isEqualTo(true)
     }
 }

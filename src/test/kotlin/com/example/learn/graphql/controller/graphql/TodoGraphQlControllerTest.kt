@@ -4,6 +4,7 @@ import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.justRun
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.data.repository.findByIdOrNull
@@ -121,5 +122,57 @@ class TodoGraphQlControllerTest {
         """.trimIndent()
 
         graphQlTester.document(document).execute().path("createTodo").matchesJson(expected)
+    }
+
+    @Test
+    fun `mutation - updateTodo`() {
+        every { todoRepository.findByIdOrNull(100) } returns Todo(
+            id = 100,
+            userId = 222,
+            title = "更新前タイトル",
+            description = "更新前詳細"
+        )
+        every { todoRepository.save(any()) } answers { args[0] as Todo }
+
+        val document = """
+            mutation {
+                updateTodo(input: {
+                    id: "100",
+                    userId: "222",
+                    title: "更新後タイトル",
+                    description: "更新後詳細"
+                }) {
+                    id
+                    userId
+                    title
+                    description
+                }
+            }
+        """.trimIndent()
+
+        val expected = """
+            {
+                "id": "100",
+                "userId": "222",
+                "title": "更新後タイトル",
+                "description": "更新後詳細"
+            }
+        """.trimIndent()
+
+        graphQlTester.document(document).execute().path("updateTodo").matchesJson(expected)
+    }
+
+    @Test
+    fun `mutation - deleteTodo`() {
+        every { todoRepository.existsById(100) } returns true
+        justRun { todoRepository.deleteById(100) }
+
+        val document = """
+            mutation {
+                deleteTodo(id: "100")
+            }
+        """.trimIndent()
+
+        graphQlTester.document(document).execute().path("deleteTodo").entity(Boolean::class.java).isEqualTo(true)
     }
 }
