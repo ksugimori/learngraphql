@@ -1,8 +1,10 @@
-# このファイルでは共通的に利用する型などを定義
-# 分割したファイルでは Query や Mutation を extend する
+"""
+参照系処理のルート型
+"""
+type Query # 各スキーマファイルではこの型を extend して参照系の操作を定義。
 
-# Spring for GraphQL は .graphqls ファイルをすべて読み込むので
-# ファイル名は何でも良いが、慣習的に schema.graphqls が使われるらしい
 
-type Query
-type Mutation
+"""
+更新系処理のルート型
+"""
+type Mutation # 各スキーマファイルではこの型 extend して更新系の操作を定義。

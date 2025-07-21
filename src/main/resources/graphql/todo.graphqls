@@ -4,10 +4,26 @@
 type Todo {
     id: ID!
 
-    """
-    ユーザーID
-    """
+    "ユーザーID"
     userId: String!
+
+    "タイトル"
+    title: String!
+
+    "詳細"
+    description: String
+}
+
+"""
+Todo作成の input 。
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateTodoInput {
+    """
+    ユーザーID。
+    基本的にはログイン中のユーザーIDがセットされる想定。
+    """
+    userId: ID!
 
     """
     タイトル
@@ -17,16 +33,6 @@ type Todo {
     """
     詳細
     """
-    description: String
-}
-
-"""
-Todo作成の input
-IDは自動採番されるのでそれ以外の項目のみ。
-"""
-input CreateTodoInput {
-    userId: ID!
-    title: String!
     description: String
 }
 
@@ -41,12 +47,30 @@ input UpdateTodoInput {
 }
 
 extend type Query {
+    """
+    Todo の一覧を取得する。
+    """
     todos: [Todo!]
+
+    """
+    Todo を取得する。
+    """
     todo(id: ID!): Todo
 }
 
 extend type Mutation {
+    """
+    Todo を作成する。
+    """
     createTodo(input: CreateTodoInput!): Todo!
+
+    """
+    Todo を更新する。
+    """
     updateTodo(input: UpdateTodoInput!): Todo!
+
+    """
+    Todo を削除する。
+    """
     deleteTodo(id: ID!): Boolean!
 }

@@ -4,19 +4,15 @@
 type User {
     id: ID!
 
-    """
-    ユーザー名
-    """
+    "ユーザー名"
     name: String!
 
-    """
-    タスク一覧
-    """
+    "タスク一覧"
     todos: [Todo!]
 }
 
 """
-ユーザー作成の input
+ユーザー作成の input 。
 IDは自動採番されるのでそれ以外の項目のみ。
 """
 input CreateUserInput {
@@ -24,7 +20,7 @@ input CreateUserInput {
 }
 
 """
-ユーザー更新の input
+ユーザー更新の input 。
 部分更新に対応するため全項目 nullable にしています。
 """
 input UpdateUserInput {
@@ -33,13 +29,40 @@ input UpdateUserInput {
 }
 
 extend type Query {
-    users: [User!]
-    user(id: ID!): User
+    """
+    ユーザーの一覧を取得する。
 
+    REST の `GET /users` 二対応
+    """
+    users: [User!]
+
+    """
+    id が一致するユーザーを取得する。
+
+    REST の `GET /users/{id}` に対応
+    """
+    user(id: ID!): User
 }
 
 extend type Mutation {
+    """
+    ユーザーを作成する。
+
+    REST の `POST /users` に対応
+    """
     createUser(input: CreateUserInput!): User!
+
+    """
+    ユーザーを更新する。
+
+    REST の `PUT /users/{id}`、`PATCH /users/{id}` に対応
+    """
     updateUser(input: UpdateUserInput!): User!
+
+    """
+    ユーザーを削除する。
+
+    REST の `DELETE /users/{id}` に対応
+    """
     deleteUser(id: ID!): Boolean!
 }
