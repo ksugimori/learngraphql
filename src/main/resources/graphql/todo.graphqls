@@ -41,7 +41,6 @@ Todo更新の input
 """
 input UpdateTodoInput {
     id: ID!
-    userId: ID!
     title: String
     isCompleted: Boolean
 }

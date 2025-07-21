@@ -137,7 +137,6 @@ class TodoGraphQlControllerTest {
             mutation {
                 updateTodo(input: {
                     id: "100",
-                    userId: "222",
                     title: "更新後タイトル",
                     isCompleted: true
                 }) {
