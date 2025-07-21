@@ -10,8 +10,8 @@ type Todo {
     "タイトル"
     title: String!
 
-    "詳細"
-    description: String
+    "完了済か？"
+    isCompleted: Boolean
 }
 
 """
@@ -31,9 +31,9 @@ input CreateTodoInput {
     title: String!
 
     """
-    詳細
+    完了済か？
     """
-    description: String
+    isCompleted: Boolean
 }
 
 """
@@ -43,7 +43,7 @@ input UpdateTodoInput {
     id: ID!
     userId: ID!
     title: String
-    description: String
+    isCompleted: Boolean
 }
 
 extend type Query {

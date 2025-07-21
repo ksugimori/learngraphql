@@ -28,7 +28,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
             id = null,
             userId = input.userId,
             title = input.title,
-            description = input.description
+            isCompleted = false, // 新規登録時は必ず false
         )
 
         return todoRepository.save(todo)
@@ -53,6 +53,6 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
 
     private fun Todo.updatedWith(input: UpdateTodoInput): Todo = this.copy(
         title = input.title ?: this.title,
-        description = input.description ?: this.description
+        isCompleted = input.isCompleted ?: this.isCompleted
     )
 }

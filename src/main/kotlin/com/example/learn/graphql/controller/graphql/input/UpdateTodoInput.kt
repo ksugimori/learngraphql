@@ -4,5 +4,5 @@ data class UpdateTodoInput(
     val id: Long,
     val userId: Long,
     val title: String?,
-    val description: String?,
+    val isCompleted: Boolean?,
 )

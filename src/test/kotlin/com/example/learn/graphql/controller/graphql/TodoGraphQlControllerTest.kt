@@ -25,7 +25,7 @@ class TodoGraphQlControllerTest {
             id = 999,
             userId = 1,
             title = "かいもの",
-            description = "えんぴつを買う"
+            isCompleted = true
         )
 
 
@@ -35,7 +35,7 @@ class TodoGraphQlControllerTest {
                     id
                     userId
                     title
-                    description
+                    isCompleted
                 }
             }
         """.trimIndent()
@@ -46,7 +46,7 @@ class TodoGraphQlControllerTest {
                 "id": "999",
                 "userId": "1",
                 "title": "かいもの",
-                "description": "えんぴつを買う"
+                "isCompleted": true
             }
         """.trimIndent()
 
@@ -56,8 +56,8 @@ class TodoGraphQlControllerTest {
     @Test
     fun `query - todos`() {
         every { todoRepository.findAll() } returns listOf(
-            Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"),
-            Todo(id = 2, userId = 100, title = "ふたつめ", description = "ふたつめの詳細"),
+            Todo(id = 1, userId = 100, title = "ひとつめ", isCompleted = true),
+            Todo(id = 2, userId = 100, title = "ふたつめ", isCompleted = false),
         )
 
 
@@ -67,7 +67,7 @@ class TodoGraphQlControllerTest {
                     id
                     userId
                     title
-                    description
+                    isCompleted
                 }
             }
         """.trimIndent()
@@ -78,13 +78,13 @@ class TodoGraphQlControllerTest {
                     "id": "1",
                     "userId": "100",
                     "title": "ひとつめ",
-                    "description": "ひとつめの詳細"
+                    "isCompleted": true
                 },
                 {
                     "id": "2",
                     "userId": "100",
                     "title": "ふたつめ",
-                    "description": "ふたつめの詳細"
+                    "isCompleted": false
                 }
             ]
         """.trimIndent()
@@ -101,13 +101,12 @@ class TodoGraphQlControllerTest {
             mutation {
                 createTodo(input: {
                     userId: "111",
-                    title: "テスト",
-                    description: "詳細"
+                    title: "テスト"
                 }) {
                     id
                     userId
                     title
-                    description
+                    isCompleted
                 }
             }
         """.trimIndent()
@@ -117,7 +116,7 @@ class TodoGraphQlControllerTest {
                 "id": "999",
                 "userId": "111",
                 "title": "テスト",
-                "description": "詳細"
+                "isCompleted": false
             }
         """.trimIndent()
 
@@ -130,7 +129,7 @@ class TodoGraphQlControllerTest {
             id = 100,
             userId = 222,
             title = "更新前タイトル",
-            description = "更新前詳細"
+            isCompleted = false
         )
         every { todoRepository.save(any()) } answers { args[0] as Todo }
 
@@ -140,12 +139,12 @@ class TodoGraphQlControllerTest {
                     id: "100",
                     userId: "222",
                     title: "更新後タイトル",
-                    description: "更新後詳細"
+                    isCompleted: true
                 }) {
                     id
                     userId
                     title
-                    description
+                    isCompleted
                 }
             }
         """.trimIndent()
@@ -155,7 +154,7 @@ class TodoGraphQlControllerTest {
                 "id": "100",
                 "userId": "222",
                 "title": "更新後タイトル",
-                "description": "更新後詳細"
+                "isCompleted": true
             }
         """.trimIndent()
 

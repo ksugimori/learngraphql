@@ -7,6 +7,6 @@ CREATE TABLE todos (
     id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
     title VARCHAR(30) NOT NULL,
-    description VARCHAR(100),
+    is_completed BOOLEAN NOT NULL DEFAULT false,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

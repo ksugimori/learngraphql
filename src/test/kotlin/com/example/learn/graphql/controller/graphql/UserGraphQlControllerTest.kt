@@ -38,7 +38,7 @@ class UserGraphQlControllerTest() {
                     todos {
                         id
                         title
-                        description
+                        isCompleted
                     }
                 }
             }
@@ -64,7 +64,7 @@ class UserGraphQlControllerTest() {
                 id = 222,
                 userId = 111,
                 title = "test-title",
-                description = "test-description"
+                isCompleted = true
             )
         )
 
@@ -76,7 +76,7 @@ class UserGraphQlControllerTest() {
                     todos {
                         id
                         title
-                        description
+                        isCompleted
                     }
                 }
             }
@@ -90,7 +90,7 @@ class UserGraphQlControllerTest() {
                         {
                             "id": "222",
                             "title": "test-title",
-                            "description": "test-description"
+                            "isCompleted": true
                         }
                     ]
                 }
@@ -111,7 +111,7 @@ class UserGraphQlControllerTest() {
                 id = 999,
                 userId = 111,
                 title = "test-title",
-                description = "test-description"
+                isCompleted = true
             )
         )
         every { todoRepository.findByUserId(eq(222)) } returns emptyList()
@@ -125,7 +125,7 @@ class UserGraphQlControllerTest() {
                     todos {
                         id
                         title
-                        description
+                        isCompleted
                     }
                 }
             }
@@ -140,7 +140,7 @@ class UserGraphQlControllerTest() {
                         {
                             "id": "999",
                             "title": "test-title",
-                            "description": "test-description"
+                            "isCompleted": true
                         }
                     ]
                 },

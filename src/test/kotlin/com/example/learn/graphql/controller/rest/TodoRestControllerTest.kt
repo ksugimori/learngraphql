@@ -29,8 +29,8 @@ class TodoRestControllerTest {
     @Test
     fun `findAll - 正常系`() {
         every { todoRepository.findAll() } returns listOf(
-            Todo(id = 1, userId = 100, title = "ひとつめ", description = "ひとつめの詳細"),
-            Todo(id = 2, userId = 100, title = "ふたつめ", description = "ふたつめの詳細"),
+            Todo(id = 1, userId = 100, title = "ひとつめ", isCompleted = true),
+            Todo(id = 2, userId = 100, title = "ふたつめ", isCompleted = false),
         )
 
         mockMvc.get("/api/rest/todos").andExpectAll {
@@ -43,13 +43,13 @@ class TodoRestControllerTest {
                         "id": 1,
                         "userId": 100,
                         "title": "ひとつめ",
-                        "description": "ひとつめの詳細"
+                        "isCompleted": true
                     },
                     {
                         "id": 2,
                         "userId": 100,
                         "title": "ふたつめ",
-                        "description": "ふたつめの詳細"
+                        "isCompleted": false
                     }
                 ]
             """.trimIndent()
@@ -64,7 +64,7 @@ class TodoRestControllerTest {
             id = 999,
             userId = 1,
             title = "かいもの",
-            description = "えんぴつを買う"
+            isCompleted = false
         )
 
 
@@ -77,7 +77,7 @@ class TodoRestControllerTest {
                         "id": 999,
                         "userId": 1,
                         "title": "かいもの",
-                        "description": "えんぴつを買う"
+                        "isCompleted": false
                     }
                 ]
             """.trimIndent()
@@ -97,7 +97,7 @@ class TodoRestControllerTest {
                 {
                     "userId": 1,
                     "title": "新規TODO",
-                    "description": "詳細な説明です"
+                    "isCompleted": false
                 }
             """.trimIndent()
         }.andExpectAll {
@@ -109,7 +109,7 @@ class TodoRestControllerTest {
                     "id": 999,
                     "userId": 1,
                     "title": "新規TODO",
-                    "description": "詳細な説明です"
+                    "isCompleted": false
                 }
             """.trimIndent()
                 )
@@ -117,7 +117,7 @@ class TodoRestControllerTest {
         }
 
         // 引数にわたす際はリクエストの内容そのままなので id = null
-        val expectedUser = Todo(id = null, userId = 1, title = "新規TODO", description = "詳細な説明です")
+        val expectedUser = Todo(id = null, userId = 1, title = "新規TODO", isCompleted = false)
         verify { todoRepository.save(expectedUser) }
     }
 
@@ -132,7 +132,7 @@ class TodoRestControllerTest {
                     "id": 123,
                     "userId": 1,
                     "title": "更新テスト",
-                    "description": "詳細な説明です"
+                    "isCompleted": true
                 }
             """.trimIndent()
         }.andExpectAll {
@@ -144,7 +144,7 @@ class TodoRestControllerTest {
                     "id": 123,
                     "userId": 1,
                     "title": "更新テスト",
-                    "description": "詳細な説明です"
+                    "isCompleted": true
                 }
             """.trimIndent()
                 )
@@ -152,7 +152,7 @@ class TodoRestControllerTest {
         }
 
         // 引数にわたす際はリクエストの内容そのままなので id = null
-        val expectedUser = Todo(id = 123, userId = 1, title = "更新テスト", description = "詳細な説明です")
+        val expectedUser = Todo(id = 123, userId = 1, title = "更新テスト", isCompleted = true)
         verify { todoRepository.save(expectedUser) }
     }
 

@@ -46,7 +46,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      *   users {
      *     todos {
      *       title
-     *       description
+     *       isCompleted
      *     }
      *   }
      * }
