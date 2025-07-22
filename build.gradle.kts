@@ -44,3 +44,9 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+ktlint {
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+    }
+}
