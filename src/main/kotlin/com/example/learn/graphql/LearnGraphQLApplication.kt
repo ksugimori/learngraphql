@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class LearnGraphQLApplication
 
 fun main(args: Array<String>) {
-	runApplication<LearnGraphQLApplication>(*args)
+    runApplication<LearnGraphQLApplication>(*args)
 }

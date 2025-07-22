@@ -52,7 +52,7 @@ class TodoRestControllerTest {
                         "isCompleted": false
                     }
                 ]
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -64,9 +64,8 @@ class TodoRestControllerTest {
             id = 999,
             userId = 1,
             title = "かいもの",
-            isCompleted = false
+            isCompleted = false,
         )
-
 
         mockMvc.get("/api/rest/todos/999").andExpectAll {
             status { isOk() }
@@ -80,7 +79,7 @@ class TodoRestControllerTest {
                         "isCompleted": false
                     }
                 ]
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -111,7 +110,7 @@ class TodoRestControllerTest {
                     "title": "新規TODO",
                     "isCompleted": false
                 }
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -146,7 +145,7 @@ class TodoRestControllerTest {
                     "title": "更新テスト",
                     "isCompleted": true
                 }
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }

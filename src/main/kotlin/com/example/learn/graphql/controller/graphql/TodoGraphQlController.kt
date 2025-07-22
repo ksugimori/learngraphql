@@ -13,14 +13,10 @@ import org.springframework.stereotype.Controller
 @Controller
 class TodoGraphQlController(private val todoRepository: TodoRepository) {
     @QueryMapping
-    fun todos(): List<Todo> {
-        return todoRepository.findAll()
-    }
+    fun todos(): List<Todo> = todoRepository.findAll()
 
     @QueryMapping
-    fun todo(@Argument id: Long): Todo? {
-        return todoRepository.findByIdOrNull(id)
-    }
+    fun todo(@Argument id: Long): Todo? = todoRepository.findByIdOrNull(id)
 
     @MutationMapping
     fun createTodo(@Argument input: CreateTodoInput): Todo {
@@ -41,18 +37,15 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     }
 
     @MutationMapping
-    fun deleteTodo(@Argument id: Long): Boolean {
-        return if (todoRepository.existsById(id)) {
-            todoRepository.deleteById(id)
-            true
-        } else {
-            false
-        }
-
+    fun deleteTodo(@Argument id: Long): Boolean = if (todoRepository.existsById(id)) {
+        todoRepository.deleteById(id)
+        true
+    } else {
+        false
     }
 
     private fun Todo.updatedWith(input: UpdateTodoInput): Todo = this.copy(
         title = input.title ?: this.title,
-        isCompleted = input.isCompleted ?: this.isCompleted
+        isCompleted = input.isCompleted ?: this.isCompleted,
     )
 }

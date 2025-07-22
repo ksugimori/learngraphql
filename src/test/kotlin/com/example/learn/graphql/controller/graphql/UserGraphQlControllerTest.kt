@@ -14,7 +14,7 @@ import org.springframework.graphql.test.tester.GraphQlTester
 import kotlin.test.Test
 
 @GraphQlTest(UserGraphQlController::class)
-class UserGraphQlControllerTest() {
+class UserGraphQlControllerTest {
 
     @Autowired
     private lateinit var graphQlTester: GraphQlTester
@@ -50,7 +50,7 @@ class UserGraphQlControllerTest() {
                     "name": "Test User",
                     "todos": []
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute()
             .path("user").matchesJson(expectedUser)
@@ -64,8 +64,8 @@ class UserGraphQlControllerTest() {
                 id = 222,
                 userId = 111,
                 title = "test-title",
-                isCompleted = true
-            )
+                isCompleted = true,
+            ),
         )
 
         val document = """
@@ -94,7 +94,7 @@ class UserGraphQlControllerTest() {
                         }
                     ]
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute()
             .path("user").matchesJson(expectedUser)
@@ -111,11 +111,10 @@ class UserGraphQlControllerTest() {
                 id = 999,
                 userId = 111,
                 title = "test-title",
-                isCompleted = true
-            )
+                isCompleted = true,
+            ),
         )
         every { todoRepository.findByUserId(eq(222)) } returns emptyList()
-
 
         val document = """
             query {
@@ -150,7 +149,7 @@ class UserGraphQlControllerTest() {
                     "todos": []
                 }
             ]
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute()
             .path("users").matchesJson(expectedUser)
@@ -175,7 +174,7 @@ class UserGraphQlControllerTest() {
                     "id": "999",
                     "name": "テスト"
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute()
             .path("createUser").matchesJson(expectedUser)
@@ -200,7 +199,7 @@ class UserGraphQlControllerTest() {
                     "id": "100",
                     "name": "更新後の名前"
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute()
             .path("updateUser").matchesJson(expected)
@@ -222,7 +221,7 @@ class UserGraphQlControllerTest() {
                     "id": "100",
                     "name": "更新後の名前"
                 }
-            """.trimIndent()
+        """.trimIndent()
 
         graphQlTester.document(document).execute().path("deleteUser").entity(Boolean::class.java).isEqualTo(true)
     }

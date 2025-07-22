@@ -48,7 +48,7 @@ class UserRestControllerTest {
                         "name": "ふたりめ"
                     }
                 ]
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -57,7 +57,6 @@ class UserRestControllerTest {
     @Test
     fun `findById - 正常系`() {
         every { userRepository.findByIdOrNull(999) } returns User(id = 999, name = "テスト太郎")
-
 
         mockMvc.get("/api/rest/users/999").andExpectAll {
             status { isOk() }
@@ -82,7 +81,7 @@ class UserRestControllerTest {
                     "id": 999,
                     "name": "新規ユーザー"
                 }
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -113,7 +112,7 @@ class UserRestControllerTest {
                     "id": 999,
                     "name": "更新後の名前"
                 }
-            """.trimIndent()
+                    """.trimIndent(),
                 )
             }
         }
@@ -130,5 +129,4 @@ class UserRestControllerTest {
 
         verify { userRepository.deleteById(999) }
     }
-
 }

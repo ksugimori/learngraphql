@@ -15,5 +15,5 @@ data class User(
     val id: Long? = null,
 
     @Column
-    val name: String
+    val name: String,
 )

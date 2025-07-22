@@ -19,29 +19,19 @@ import org.springframework.web.bind.annotation.RestController
 class TodoRestController(private val todoRepository: TodoRepository) {
 
     @GetMapping
-    fun findAll(): List<Todo> {
-        return todoRepository.findAll()
-    }
+    fun findAll(): List<Todo> = todoRepository.findAll()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody todo: Todo): Todo {
-        return todoRepository.save(todo)
-    }
+    fun create(@RequestBody todo: Todo): Todo = todoRepository.save(todo)
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): Todo? {
-        return todoRepository.findByIdOrNull(id)
-    }
+    fun findById(@PathVariable id: Long): Todo? = todoRepository.findByIdOrNull(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody todo: Todo): Todo {
-        return todoRepository.save(todo)
-    }
+    fun update(@PathVariable id: Long, @RequestBody todo: Todo): Todo = todoRepository.save(todo)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Long) {
-        todoRepository.deleteById(id)
-    }
+    fun delete(@PathVariable id: Long) = todoRepository.deleteById(id)
 }

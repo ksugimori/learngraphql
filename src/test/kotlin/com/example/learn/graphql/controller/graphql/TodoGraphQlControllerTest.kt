@@ -25,9 +25,8 @@ class TodoGraphQlControllerTest {
             id = 999,
             userId = 1,
             title = "かいもの",
-            isCompleted = true
+            isCompleted = true,
         )
-
 
         val document = """
             query {
@@ -59,7 +58,6 @@ class TodoGraphQlControllerTest {
             Todo(id = 1, userId = 100, title = "ひとつめ", isCompleted = true),
             Todo(id = 2, userId = 100, title = "ふたつめ", isCompleted = false),
         )
-
 
         val document = """
             query {
@@ -129,7 +127,7 @@ class TodoGraphQlControllerTest {
             id = 100,
             userId = 222,
             title = "更新前タイトル",
-            isCompleted = false
+            isCompleted = false,
         )
         every { todoRepository.save(any()) } answers { args[0] as Todo }
 

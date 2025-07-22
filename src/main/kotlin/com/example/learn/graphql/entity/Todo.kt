@@ -21,5 +21,5 @@ data class Todo(
     val title: String,
 
     @Column
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
 )
