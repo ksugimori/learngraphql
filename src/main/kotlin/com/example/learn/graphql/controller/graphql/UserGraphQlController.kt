@@ -14,7 +14,7 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
 
 @Controller
-class UserGraphQlController(private val userRepository: UserRepository, private val toDoRepository: TodoRepository) {
+class UserGraphQlController(private val userRepository: UserRepository, private val todoRepository: TodoRepository) {
 
     @QueryMapping
     fun users(): List<User> {
@@ -57,7 +57,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: User): List<Todo> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        return toDoRepository.findByUserId(parent.id)
+        return todoRepository.findByUserId(parent.id)
     }
 
     @MutationMapping
