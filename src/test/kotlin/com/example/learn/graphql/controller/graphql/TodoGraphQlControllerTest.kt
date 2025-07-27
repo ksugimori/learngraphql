@@ -50,7 +50,9 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("todo").matchesJson(expected)
+        graphQlTester
+            .document(document).execute()
+            .path("todo").matchesJson(expected)
     }
 
     @Test
@@ -88,7 +90,9 @@ class TodoGraphQlControllerTest {
             ]
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("todos").matchesJson(expected)
+        graphQlTester
+            .document(document).execute()
+            .path("todos").matchesJson(expected)
     }
 
     @Test
@@ -119,7 +123,9 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("createTodo").matchesJson(expected)
+        graphQlTester
+            .document(document).execute()
+            .path("createTodo").matchesJson(expected)
     }
 
     @Test
@@ -156,7 +162,9 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("updateTodo").matchesJson(expected)
+        graphQlTester
+            .document(document).execute()
+            .path("updateTodo").matchesJson(expected)
     }
 
     @Test
@@ -171,11 +179,8 @@ class TodoGraphQlControllerTest {
         """.trimIndent()
 
         graphQlTester
-            .document(document)
-            .execute()
-            .path("deleteTodo")
-            .entity(String::class.java)
-            .isEqualTo("100")
+            .document(document).execute()
+            .path("deleteTodo").entity(String::class.java).isEqualTo("100")
     }
 
     @Test
@@ -189,10 +194,8 @@ class TodoGraphQlControllerTest {
         """.trimIndent()
 
         graphQlTester
-            .document(document)
-            .execute()
-            .path("deleteTodo")
-            .valueIsNull()
+            .document(document).execute()
+            .path("deleteTodo").valueIsNull()
 
         verify(exactly = 0) {
             todoRepository.deleteById(any())

@@ -45,7 +45,7 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expectedUser = """
+        val expected = """
                 {
                     "id": "1",
                     "name": "Test User",
@@ -53,8 +53,9 @@ class UserGraphQlControllerTest {
                 }
         """.trimIndent()
 
-        graphQlTester.document(document).execute()
-            .path("user").matchesJson(expectedUser)
+        graphQlTester
+            .document(document).execute()
+            .path("user").matchesJson(expected)
     }
 
     @Test
@@ -83,7 +84,7 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expectedUser = """
+        val expected = """
                 {
                     "id": "111",
                     "name": "Test User",
@@ -97,8 +98,9 @@ class UserGraphQlControllerTest {
                 }
         """.trimIndent()
 
-        graphQlTester.document(document).execute()
-            .path("user").matchesJson(expectedUser)
+        graphQlTester
+            .document(document).execute()
+            .path("user").matchesJson(expected)
     }
 
     @Test
@@ -131,7 +133,7 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expectedUser = """
+        val expected = """
             [
                 {
                     "id": "111",
@@ -152,8 +154,9 @@ class UserGraphQlControllerTest {
             ]
         """.trimIndent()
 
-        graphQlTester.document(document).execute()
-            .path("users").matchesJson(expectedUser)
+        graphQlTester
+            .document(document).execute()
+            .path("users").matchesJson(expected)
     }
 
     @Test
@@ -170,15 +173,16 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expectedUser = """
+        val expected = """
                 {
                     "id": "999",
                     "name": "テスト"
                 }
         """.trimIndent()
 
-        graphQlTester.document(document).execute()
-            .path("createUser").matchesJson(expectedUser)
+        graphQlTester
+            .document(document).execute()
+            .path("createUser").matchesJson(expected)
     }
 
     @Test
@@ -207,7 +211,7 @@ class UserGraphQlControllerTest {
     }
 
     @Test
-    fun `mutation - deleteUser - レコードが存在する場合`() {
+    fun `mutation - deleteUser - レコードが存在する場合IDが返されること`() {
         every { userRepository.existsById(100) } returns true
         justRun { userRepository.deleteById(100) }
 
@@ -217,19 +221,9 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expected = """
-                {
-                    "id": "100",
-                    "name": "更新後の名前"
-                }
-        """.trimIndent()
-
         graphQlTester
-            .document(document)
-            .execute()
-            .path("deleteUser")
-            .entity(String::class.java)
-            .isEqualTo("100")
+            .document(document).execute()
+            .path("deleteUser").entity(String::class.java).isEqualTo("100")
     }
 
     @Test
@@ -243,10 +237,8 @@ class UserGraphQlControllerTest {
         """.trimIndent()
 
         graphQlTester
-            .document(document)
-            .execute()
-            .path("deleteUser")
-            .valueIsNull()
+            .document(document).execute()
+            .path("deleteUser").valueIsNull()
 
         verify(exactly = 0) {
             userRepository.deleteById(any())
