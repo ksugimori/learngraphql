@@ -32,7 +32,7 @@ extend type Query {
     """
     ユーザーの一覧を取得する。
 
-    REST の `GET /users` 二対応
+    REST の `GET /users` に対応
     """
     users: [User!]!
 
