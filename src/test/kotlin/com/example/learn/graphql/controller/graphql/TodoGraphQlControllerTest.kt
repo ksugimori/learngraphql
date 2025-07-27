@@ -5,6 +5,7 @@ import com.example.learn.graphql.repository.TodoRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.justRun
+import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.data.repository.findByIdOrNull
@@ -159,7 +160,7 @@ class TodoGraphQlControllerTest {
     }
 
     @Test
-    fun `mutation - deleteTodo`() {
+    fun `mutation - deleteTodo - レコードが存在する場合IDが返されること`() {
         every { todoRepository.existsById(100) } returns true
         justRun { todoRepository.deleteById(100) }
 
@@ -169,6 +170,32 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("deleteTodo").entity(Boolean::class.java).isEqualTo(true)
+        graphQlTester
+            .document(document)
+            .execute()
+            .path("deleteTodo")
+            .entity(String::class.java)
+            .isEqualTo("100")
+    }
+
+    @Test
+    fun `mutation - deleteTodo - レコードが存在しない場合nullが返されること`() {
+        every { todoRepository.existsById(100) } returns false
+
+        val document = """
+            mutation {
+                deleteTodo(id: "100")
+            }
+        """.trimIndent()
+
+        graphQlTester
+            .document(document)
+            .execute()
+            .path("deleteTodo")
+            .valueIsNull()
+
+        verify(exactly = 0) {
+            todoRepository.deleteById(any())
+        }
     }
 }

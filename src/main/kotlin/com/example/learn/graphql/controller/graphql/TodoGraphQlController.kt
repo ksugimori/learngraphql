@@ -41,12 +41,10 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     }
 
     @MutationMapping
-    fun deleteTodo(@Argument id: Long): Boolean {
-        return if (todoRepository.existsById(id)) {
-            todoRepository.deleteById(id)
-            true
-        } else {
-            false
-        }
+    fun deleteTodo(@Argument id: Long): Long? {
+        if (todoRepository.existsById(id).not()) return null
+
+        todoRepository.deleteById(id)
+        return id
     }
 }

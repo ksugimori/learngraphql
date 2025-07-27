@@ -7,6 +7,7 @@ import com.example.learn.graphql.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.justRun
+import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.data.repository.findByIdOrNull
@@ -206,7 +207,7 @@ class UserGraphQlControllerTest {
     }
 
     @Test
-    fun `mutation - deleteUser`() {
+    fun `mutation - deleteUser - レコードが存在する場合`() {
         every { userRepository.existsById(100) } returns true
         justRun { userRepository.deleteById(100) }
 
@@ -223,6 +224,32 @@ class UserGraphQlControllerTest {
                 }
         """.trimIndent()
 
-        graphQlTester.document(document).execute().path("deleteUser").entity(Boolean::class.java).isEqualTo(true)
+        graphQlTester
+            .document(document)
+            .execute()
+            .path("deleteUser")
+            .entity(String::class.java)
+            .isEqualTo("100")
+    }
+
+    @Test
+    fun `mutation - deleteUser - レコードが存在しない場合nullが返されること`() {
+        every { userRepository.existsById(100) } returns false
+
+        val document = """
+            mutation {
+                deleteUser(id: "100")
+            }
+        """.trimIndent()
+
+        graphQlTester
+            .document(document)
+            .execute()
+            .path("deleteUser")
+            .valueIsNull()
+
+        verify(exactly = 0) {
+            userRepository.deleteById(any())
+        }
     }
 }

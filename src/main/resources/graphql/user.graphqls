@@ -62,7 +62,8 @@ extend type Mutation {
     """
     ユーザーを削除する。
 
+    削除に成功した場合はそのID、失敗した場合はnullを返す
     REST の `DELETE /users/{id}` に対応
     """
-    deleteUser(id: ID!): Boolean!
+    deleteUser(id: ID!): ID
 }

@@ -73,10 +73,10 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     }
 
     @MutationMapping
-    fun deleteUser(@Argument id: Long): Boolean = if (userRepository.existsById(id)) {
+    fun deleteUser(@Argument id: Long): Long? {
+        if (userRepository.existsById(id).not()) return null
+
         userRepository.deleteById(id)
-        true
-    } else {
-        false
+        return id
     }
 }

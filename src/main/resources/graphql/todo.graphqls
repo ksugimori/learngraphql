@@ -70,6 +70,8 @@ extend type Mutation {
 
     """
     Todo を削除する。
+
+    削除に成功した場合はそのID、失敗した場合はnullを返す。
     """
-    deleteTodo(id: ID!): Boolean!
+    deleteTodo(id: ID!): ID
 }
