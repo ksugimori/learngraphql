@@ -1,6 +1,8 @@
 package com.example.learn.graphql.controller.rest
 
+import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
+import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/rest/users")
 @RestController
-class UserRestController(private val userRepository: UserRepository) {
+class UserRestController(private val userRepository: UserRepository, private val todoRepository: TodoRepository) {
     @GetMapping
     fun findAll(): List<User> = userRepository.findAll()
 
@@ -33,4 +35,7 @@ class UserRestController(private val userRepository: UserRepository) {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = userRepository.deleteById(id)
+
+    @GetMapping("/{id}/todos")
+    fun userTodos(@PathVariable id: Long): List<Todo> = todoRepository.findByUserId(id)
 }

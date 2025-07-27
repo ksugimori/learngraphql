@@ -1,6 +1,8 @@
 package com.example.learn.graphql.controller.rest
 
+import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
+import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -25,6 +27,9 @@ class UserRestControllerTest {
 
     @MockkBean
     private lateinit var userRepository: UserRepository
+
+    @MockkBean
+    private lateinit var todoRepository: TodoRepository
 
     @Test
     fun `findAll - 正常系`() {
@@ -128,5 +133,37 @@ class UserRestControllerTest {
         mockMvc.delete("/api/rest/users/999").andExpect { status { isNoContent() } }
 
         verify { userRepository.deleteById(999) }
+    }
+
+    @Test
+    fun `userTodos - 正常系`() {
+        every { userRepository.findByIdOrNull(999) } returns User(id = 999, name = "テスト太郎")
+
+        every { todoRepository.findByUserId(999) } returns listOf(
+            Todo(
+                id = 1,
+                userId = 999,
+                title = "かいもの",
+                isCompleted = false,
+            ),
+        )
+
+        mockMvc.get("/api/rest/users/999/todos").andExpectAll {
+            status { isOk() }
+            content {
+                json(
+                    """
+                [
+                    {
+                        "id": 1,
+                        "userId": 999,
+                        "title": "かいもの",
+                        "isCompleted": false
+                    }
+                ]
+                    """.trimIndent(),
+                )
+            }
+        }
     }
 }
