@@ -20,22 +20,34 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserRestController(private val userRepository: UserRepository, private val todoRepository: TodoRepository) {
     @GetMapping
-    fun findAll(): List<User> = userRepository.findAll()
+    fun findAll(): List<User> {
+        return userRepository.findAll()
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody user: User): User = userRepository.save(user)
+    fun create(@RequestBody user: User): User {
+        return userRepository.save(user)
+    }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable id: Long): User? = userRepository.findByIdOrNull(id)
+    fun findById(@PathVariable id: Long): User? {
+        return userRepository.findByIdOrNull(id)
+    }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody user: User): User = userRepository.save(user)
+    fun update(@PathVariable id: Long, @RequestBody user: User): User {
+        return userRepository.save(user)
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Long) = userRepository.deleteById(id)
+    fun delete(@PathVariable id: Long) {
+        userRepository.deleteById(id)
+    }
 
     @GetMapping("/{id}/todos")
-    fun userTodos(@PathVariable id: Long): List<Todo> = todoRepository.findByUserId(id)
+    fun userTodos(@PathVariable id: Long): List<Todo> {
+        return todoRepository.findByUserId(id)
+    }
 }

@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller
 class UserGraphQlController(private val userRepository: UserRepository, private val todoRepository: TodoRepository) {
 
     @QueryMapping
-    fun users(): List<User> = userRepository.findAll()
+    fun users(): List<User> {
+        return userRepository.findAll()
+    }
 
     /**
      * user クエリのハンドリング
@@ -25,7 +27,9 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      * [org.springframework.graphql.data.method.annotation.QueryMapping] でクエリを処理するメソッドを紐づけ。引数は [org.springframework.graphql.data.method.annotation.Argument] でマッピング
      */
     @QueryMapping
-    fun user(@Argument id: Long): User? = userRepository.findByIdOrNull(id)
+    fun user(@Argument id: Long): User? {
+        return userRepository.findByIdOrNull(id)
+    }
 
     /**
      * ネストした型のマッピング。

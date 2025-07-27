@@ -1,2 +1,5 @@
 [*.{kt,kts}]
 ktlint_code_style = intellij_idea
+
+[*.kt]
+ktlint_standard_function-expression-body = disabled
