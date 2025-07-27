@@ -1,5 +1,6 @@
 package com.example.learn.graphql.entity
 
+import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -16,4 +17,11 @@ data class User(
 
     @Column
     val name: String,
-)
+) {
+    /**
+     * [UpdateUserInput] の内容を反映する。
+     */
+    fun updatedWith(input: UpdateUserInput): User = this.copy(
+        name = input.name ?: this.name,
+    )
+}

@@ -79,8 +79,4 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     } else {
         false
     }
-
-    private fun User.updatedWith(input: UpdateUserInput): User = this.copy(
-        name = input.name ?: this.name,
-    )
 }

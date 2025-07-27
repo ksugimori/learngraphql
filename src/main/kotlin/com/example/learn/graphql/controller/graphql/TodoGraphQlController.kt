@@ -49,9 +49,4 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
             false
         }
     }
-
-    private fun Todo.updatedWith(input: UpdateTodoInput): Todo = this.copy(
-        title = input.title ?: this.title,
-        isCompleted = input.isCompleted ?: this.isCompleted,
-    )
 }

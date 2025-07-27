@@ -1,5 +1,6 @@
 package com.example.learn.graphql.entity
 
+import com.example.learn.graphql.controller.graphql.input.UpdateTodoInput
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -22,4 +23,12 @@ data class Todo(
 
     @Column
     val isCompleted: Boolean,
-)
+) {
+    /**
+     * [UpdateTodoInput] の内容を反映する。
+     */
+    fun updatedWith(input: UpdateTodoInput): Todo = this.copy(
+        title = input.title ?: this.title,
+        isCompleted = input.isCompleted ?: this.isCompleted,
+    )
+}
