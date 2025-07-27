@@ -49,7 +49,7 @@ extend type Query {
     """
     Todo の一覧を取得する。
     """
-    todos: [Todo!]
+    todos: [Todo!]!
 
     """
     Todo を取得する。
