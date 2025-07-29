@@ -9,6 +9,10 @@ Spring for GraphQL を使って GraphQL の学習をするためのリポジト�
 ### ER図
 
 ```mermaid
+---
+config:
+  theme: 'neutral'
+---
 erDiagram
     USERS {
         BIGINT id PK
