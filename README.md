@@ -1,14 +1,45 @@
-# GraphQL 学習メモ
+# GraphQL 学習用リポジトリ
 
-GraphQL についての学習用リポジトリ。
+Spring for GraphQL を使って GraphQL の学習をするためのリポジトリ。
 
-## Spring for GraphQL + Spring Boot での基本的な流れ
+## アプリ概要
 
-- GraphQL スキーマ定義は src/resources/*.graphqls
-- コントローラーのメソッドに `@QueryMapping` や `@MutationMapping` を付与すると query や mutation とマッピングされる
+シンプルな Todo アプリケーション。
 
-## GraphiQL
+### ER図
 
-起動後に以下の URL でアクセス可能
+```mermaid
+erDiagram
+    USERS {
+        BIGINT id PK
+        VARCHAR name
+    }
+    TODOS {
+        BIGINT id PK
+        BIGINT user_id FK
+        VARCHAR title
+        BOOLEAN is_completed
+    }
+    USERS ||--o{ TODOS: "has"
+```
 
-http://localhost:8080/graphiql.html
+### API
+
+これらに対する操作を REST API と GraphQL の両方で提供する。
+実装は [src/main/kotlin/com/example/learn/graphql/controller](src/main/kotlin/com/example/learn/graphql/controller)
+ディレクトリ。
+
+### 使用ライブラリ
+
+- Spring Boot
+- Spring for GraphQL
+- Spring Data JPA
+- H2 Database
+
+## 起動方法
+
+```bash
+./gradlew bootRun
+```
+
+起動後に http://localhost:8080/ から Swagger UI と GraphiQL へ遷移できます。
