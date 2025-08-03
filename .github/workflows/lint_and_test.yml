@@ -1,10 +1,14 @@
-name: Lint and Test
-run-name: Lint and Test on ${{ github.ref_name }}
+name: Server: Lint and Test
+run-name: Server: Lint and Test on ${{ github.ref_name }}
 
 on:
   push:
     branches:
       - '**'
+
+defaults:
+  run:
+    working-directory: ./server
 
 jobs:
   lint:
