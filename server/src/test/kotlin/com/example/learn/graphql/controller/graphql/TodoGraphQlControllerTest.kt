@@ -1,18 +1,23 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.errors.GraphQlExceptionResolver
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
 import com.ninjasquad.springmockk.MockkBean
+import graphql.ErrorType
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
+import org.springframework.context.annotation.Import
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.test.tester.GraphQlTester
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @GraphQlTest(TodoGraphQlController::class)
+@Import(GraphQlExceptionResolver::class)
 class TodoGraphQlControllerTest {
     @Autowired
     private lateinit var graphQlTester: GraphQlTester
@@ -165,6 +170,35 @@ class TodoGraphQlControllerTest {
         graphQlTester
             .document(document).execute()
             .path("updateTodo").matchesJson(expected)
+    }
+
+    @Test
+    fun `mutation - updateTodo - レコードが存在しない場合`() {
+        every { todoRepository.findByIdOrNull(any()) } returns null
+
+        val document = """
+            mutation {
+                updateTodo(input: {
+                    id: "100",
+                    title: "更新後タイトル",
+                    isCompleted: true
+                }) {
+                    id
+                    userId
+                    title
+                    isCompleted
+                }
+            }
+        """.trimIndent()
+
+        graphQlTester
+            .document(document).execute()
+            .errors().satisfy {
+                assertEquals(1, it.size)
+                assertEquals("Todo with id 100 not found", it[0].message)
+                assertEquals(ErrorType.DataFetchingException, it[0].errorType)
+            }
+            .path("updateTodo").valueIsNull()
     }
 
     @Test

@@ -1,20 +1,25 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.errors.GraphQlExceptionResolver
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
 import com.ninjasquad.springmockk.MockkBean
+import graphql.ErrorType
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
+import org.springframework.context.annotation.Import
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.test.tester.GraphQlTester
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @GraphQlTest(UserGraphQlController::class)
+@Import(GraphQlExceptionResolver::class)
 class UserGraphQlControllerTest {
 
     @Autowired
@@ -208,6 +213,36 @@ class UserGraphQlControllerTest {
 
         graphQlTester.document(document).execute()
             .path("updateUser").matchesJson(expected)
+    }
+
+    @Test
+    fun `mutation - updateUser - ユーザーが存在しない場合`() {
+        every { userRepository.findByIdOrNull(any()) } returns null
+
+        val document = """
+            mutation {
+                updateUser(input: { id: "100", name: "更新後の名前" }) {
+                    id
+                    name
+                }
+            }
+        """.trimIndent()
+
+        val expected = """
+                {
+                    "id": "100",
+                    "name": "更新後の名前"
+                }
+        """.trimIndent()
+
+        graphQlTester.document(document).execute()
+            .errors().satisfy { errors ->
+                assert(errors.size == 1)
+                val error = errors[0]
+                assertEquals("User with id 100 not found", error.message)
+                assertEquals(ErrorType.DataFetchingException, error.errorType)
+            }
+            .path("updateUser").valueIsNull()
     }
 
     @Test

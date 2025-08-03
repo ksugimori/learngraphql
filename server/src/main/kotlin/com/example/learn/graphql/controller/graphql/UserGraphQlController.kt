@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
 import com.example.learn.graphql.entity.Todo
@@ -68,7 +69,8 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
 
     @MutationMapping
     fun updateUser(@Argument input: UpdateUserInput): User {
-        val user = userRepository.findByIdOrNull(input.id) ?: TODO("404エラーにする")
+        val user = userRepository.findByIdOrNull(input.id)
+            ?: throw NotFoundException(message = "User with id ${input.id} not found")
         return userRepository.save(user.updatedWith(input))
     }
 
@@ -79,4 +81,5 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
         userRepository.deleteById(id)
         return id
     }
+
 }

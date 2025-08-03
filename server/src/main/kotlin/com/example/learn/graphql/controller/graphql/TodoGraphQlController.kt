@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateTodoInput
 import com.example.learn.graphql.controller.graphql.input.UpdateTodoInput
 import com.example.learn.graphql.entity.Todo
@@ -36,7 +37,8 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
 
     @MutationMapping
     fun updateTodo(@Argument input: UpdateTodoInput): Todo {
-        val todo = todoRepository.findByIdOrNull(input.id) ?: TODO("404")
+        val todo = todoRepository.findByIdOrNull(input.id)
+            ?: throw NotFoundException("Todo with id ${input.id} not found")
         return todoRepository.save(todo.updatedWith(input))
     }
 

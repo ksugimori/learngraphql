@@ -61,12 +61,12 @@ extend type Mutation {
     """
     Todo を作成する。
     """
-    createTodo(input: CreateTodoInput!): Todo!
+    createTodo(input: CreateTodoInput!): Todo
 
     """
     Todo を更新する。
     """
-    updateTodo(input: UpdateTodoInput!): Todo!
+    updateTodo(input: UpdateTodoInput!): Todo
 
     """
     Todo を削除する。
