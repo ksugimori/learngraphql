@@ -81,5 +81,4 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
         userRepository.deleteById(id)
         return id
     }
-
 }
