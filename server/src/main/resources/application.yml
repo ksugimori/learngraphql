@@ -17,3 +17,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  graphql:
+    cors:
+      allowed-origins: "http://localhost:5173"
+      allowed-methods: GET,POST

@@ -1,0 +1,151 @@
+"""Exposes a URL that specifies the behaviour of this scalar."""
+directive @specifiedBy(
+  """The URL that specifies the behaviour of this scalar."""
+  url: String!
+) on SCALAR
+
+"""Indicates an Input Object is a OneOf Input Object."""
+directive @oneOf on INPUT_OBJECT
+
+"""This directive allows results to be deferred during execution"""
+directive @defer(
+  """Deferred behaviour is controlled by this argument"""
+  if: Boolean! = true
+
+  """A unique label that represents the fragment being deferred"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+"""
+This directive disables error propagation when a non nullable field returns null for the given operation.
+"""
+directive @experimental_disableErrorPropagation on QUERY | MUTATION | SUBSCRIPTION
+
+"""
+Todo作成の input 。
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateTodoInput {
+  """
+  ユーザーID。
+  基本的にはログイン中のユーザーIDがセットされる想定。
+  """
+  userId: ID!
+
+  """タイトル"""
+  title: String!
+
+  """完了済か？"""
+  isCompleted: Boolean
+}
+
+"""
+ユーザー作成の input 。
+IDは自動採番されるのでそれ以外の項目のみ。
+"""
+input CreateUserInput {
+  name: String!
+}
+
+"""更新系処理のルート型"""
+type Mutation {
+  """Todo を作成する。"""
+  createTodo(input: CreateTodoInput!): Todo!
+
+  """Todo を更新する。"""
+  updateTodo(input: UpdateTodoInput!): Todo!
+
+  """
+  Todo を削除する。
+  
+  削除に成功した場合はそのID、失敗した場合はnullを返す。
+  """
+  deleteTodo(id: ID!): ID
+
+  """
+  ユーザーを作成する。
+  
+  REST の `POST /users` に対応
+  """
+  createUser(input: CreateUserInput!): User!
+
+  """
+  ユーザーを更新する。
+  
+  REST の `PUT /users/{id}`、`PATCH /users/{id}` に対応
+  """
+  updateUser(input: UpdateUserInput!): User!
+
+  """
+  ユーザーを削除する。
+  
+  削除に成功した場合はそのID、失敗した場合はnullを返す
+  REST の `DELETE /users/{id}` に対応
+  """
+  deleteUser(id: ID!): ID
+}
+
+"""参照系処理のルート型"""
+type Query {
+  """Todo の一覧を取得する。"""
+  todos: [Todo!]!
+
+  """Todo を取得する。"""
+  todo(id: ID!): Todo
+
+  """
+  ユーザーの一覧を取得する。
+  
+  REST の `GET /users` に対応
+  """
+  users: [User!]!
+
+  """
+  id が一致するユーザーを取得する。
+  
+  REST の `GET /users/{id}` に対応
+  """
+  user(id: ID!): User
+}
+
+"""タスク"""
+type Todo {
+  id: ID!
+
+  """ユーザーID"""
+  userId: String!
+
+  """タイトル"""
+  title: String!
+
+  """完了済か？"""
+  isCompleted: Boolean
+}
+
+"""Todo更新の input"""
+input UpdateTodoInput {
+  id: ID!
+  title: String
+  isCompleted: Boolean
+}
+
+"""
+ユーザー更新の input 。
+部分更新に対応するため全項目 nullable にしています。
+"""
+input UpdateUserInput {
+  id: ID!
+  name: String
+}
+
+"""ユーザー"""
+type User {
+  id: ID!
+
+  """ユーザー名"""
+  name: String!
+
+  """タスク一覧"""
+  todos: [Todo!]!
+}
+
