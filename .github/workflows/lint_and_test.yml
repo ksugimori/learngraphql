@@ -1,8 +1,11 @@
-name: Server Lint and Test
-run-name: Server Lint and Test on ${{ github.ref_name }}
+name: Lint and Test
+run-name: Lint and Test on ${{ github.ref_name }}
 
 on:
   push:
+    paths:
+      - 'client/**'
+      - 'server/**'
     branches:
       - "**"
 
@@ -61,6 +64,9 @@ jobs:
       - server-lint
     if: ${{ needs.changes.outputs.server == 'true' }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
