@@ -1,7 +1,10 @@
 import { graphql, useLazyLoadQuery } from "react-relay";
 import type { TodoListQuery } from "./__generated__/TodoListQuery.graphql";
+import { useParams } from "react-router-dom";
 
-export function TodoList({ userId }: { userId: string }) {
+export function TodoList() {
+  const { userId } = useParams<{ userId: string }>();
+
   const data = useLazyLoadQuery<TodoListQuery>(
     graphql`
       query TodoListQuery($userId: ID!) {
@@ -16,7 +19,7 @@ export function TodoList({ userId }: { userId: string }) {
         }
       }
     `,
-    { userId }
+    { userId: userId! }
   );
 
   return (
