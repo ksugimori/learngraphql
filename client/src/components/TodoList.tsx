@@ -1,6 +1,7 @@
 import { graphql, useLazyLoadQuery } from "react-relay";
-import type { TodoListQuery } from "./__generated__/TodoListQuery.graphql";
 import { useParams } from "react-router-dom";
+
+import type { TodoListQuery } from "./__generated__/TodoListQuery.graphql";
 
 export function TodoList() {
   const { userId } = useParams<{ userId: string }>();
