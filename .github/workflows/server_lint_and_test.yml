@@ -1,34 +1,15 @@
-name: Lint and Test
-run-name: Lint and Test on ${{ github.ref_name }}
+name: Server Lint and Test
+run-name: Server Lint and Test on ${{ github.ref_name }}
 
 on:
   push:
     paths:
-      - 'client/**'
-      - 'server/**'
+      - "server/**"
     branches:
       - "**"
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      client: ${{ steps.filter.outputs.client }}
-      server: ${{ steps.filter.outputs.server }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            client:
-              - 'client/**'
-            server:
-              - 'server/**'
-
-  server-lint:
-    needs: changes
-    if: ${{ needs.changes.outputs.server == 'true' }}
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -58,11 +39,9 @@ jobs:
       - name: Run ktlintCheck
         run: ./gradlew ktlintCheck
 
-  server-test:
-    needs: 
-      - changes
-      - server-lint
-    if: ${{ needs.changes.outputs.server == 'true' }}
+  test:
+    needs:
+      - lint
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -91,24 +70,3 @@ jobs:
 
       - name: Run tests
         run: ./gradlew test
-
-  client-lint:
-    needs: changes
-    if: ${{ needs.changes.outputs.client == 'true' }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: client
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: client/package-lock.json
-      - name: Install dependencies
-        run: npm ci
-      - name: Run lint
-        run: npm run lint
