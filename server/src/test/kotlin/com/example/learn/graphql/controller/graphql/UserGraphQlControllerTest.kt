@@ -228,13 +228,6 @@ class UserGraphQlControllerTest {
             }
         """.trimIndent()
 
-        val expected = """
-                {
-                    "id": "100",
-                    "name": "更新後の名前"
-                }
-        """.trimIndent()
-
         graphQlTester.document(document).execute()
             .errors().satisfy { errors ->
                 assert(errors.size == 1)
