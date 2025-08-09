@@ -96,7 +96,7 @@ class UserGraphQlControllerTest {
                     "todos": [
                         {
                             "id": "222",
-                            "title": "invalid-test-title",
+                            "title": "test-title",
                             "isCompleted": true
                         }
                     ]
