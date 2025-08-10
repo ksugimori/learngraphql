@@ -1,9 +1,11 @@
-import type React from "react";
 
 import { graphql, useMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
-import type { CreateUserPageMutation } from "./__generated__/CreateUserPageMutation.graphql";
+
 import styles from "./style.module.css";
+
+import type { CreateUserPageMutation } from "./__generated__/CreateUserPageMutation.graphql";
+import type React from "react";
 
 export const CreateUserPage: React.FC = () => {
   const navigate = useNavigate();

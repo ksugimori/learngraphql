@@ -1,7 +1,8 @@
-import type React from "react";
 import { Link } from "react-router-dom";
 
 import styles from "./style.module.css";
+
+import type React from "react";
 
 export const HomePage: React.FC = () => {
   return (

@@ -1,7 +1,8 @@
-import type React from "react";
 import { graphql, useLazyLoadQuery } from "react-relay";
 import { useParams } from "react-router-dom";
+
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
+import type React from "react";
 
 export const UserDetailPage: React.FC = () => {
   const { userId } = useParams();

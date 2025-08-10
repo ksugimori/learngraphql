@@ -1,8 +1,9 @@
-import type React from "react";
 import { graphql, useLazyLoadQuery } from "react-relay";
-import type { UsersPageQuery } from "./__generated__/UsersPageQuery.graphql";
 
 import styles from "./style.module.css";
+
+import type { UsersPageQuery } from "./__generated__/UsersPageQuery.graphql";
+import type React from "react";
 
 export const UsersPage: React.FC = () => {
   const { users } = useLazyLoadQuery<UsersPageQuery>(

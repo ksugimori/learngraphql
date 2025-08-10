@@ -10,5 +10,7 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "vitest.enable": true,
+  "testing.automaticallyOpenPeekView": "never"
 }
