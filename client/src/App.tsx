@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { TodoList } from "./components/TodoList";
+import { UsersPage } from "./components/UsersPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/users/:userId/todos" element={<TodoList />}></Route>
+        <Route path="/users/" element={<UsersPage />} />
       </Routes>
     </BrowserRouter>
   );
