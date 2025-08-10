@@ -1,8 +1,8 @@
 import { graphql, useLazyLoadQuery } from "react-relay";
 import { useParams } from "react-router-dom";
 
-import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 import type React from "react";
+import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 
 export const UserDetailPage: React.FC = () => {
   const { userId } = useParams();
@@ -26,7 +26,7 @@ export const UserDetailPage: React.FC = () => {
     return (
       <main>
         <h1>User</h1>
-        <p>userId = {userId} not found.</p>
+        <p>User Not Found. ID: {userId}</p>
       </main>
     );
   }
