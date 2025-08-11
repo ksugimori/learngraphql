@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { useLazyLoadQuery } from "react-relay";
 import { useParams } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { UserDetailPage } from "./index";
 
@@ -23,7 +23,8 @@ describe("UserDetailPage", () => {
   });
 
   describe("正常系", () => {
-    it("レスポンスのユーザー名タイトルに表示される", () => {
+    test("レスポンスのユーザー名タイトルに表示される", () => {
+      // Given
       mockUseParams.mockReturnValue({ userId: "1" });
       mockUseLazyLoadQuery.mockReturnValue({
         user: {
@@ -32,11 +33,15 @@ describe("UserDetailPage", () => {
         },
       });
 
+      // When
       render(<UserDetailPage />);
+
+      // Then
       expect(screen.getByText("User: Alice")).toBeInTheDocument();
     });
 
-    it("ユーザーに紐づく Todo のタイトルが表示される", () => {
+    test("ユーザーに紐づく Todo のタイトルが表示される", () => {
+      // Given
       mockUseParams.mockReturnValue({ userId: "1" });
       mockUseLazyLoadQuery.mockReturnValue({
         user: {
@@ -48,18 +53,25 @@ describe("UserDetailPage", () => {
         },
       });
 
+      // When
       render(<UserDetailPage />);
+
+      // Then
       expect(screen.getByText("牛乳を買う")).toBeInTheDocument();
       expect(screen.getByText("掃除")).toBeInTheDocument();
     });
   });
 
   describe("異常系", () => {
-    it("レスポンスが null ならエラーメッセージが表示される", () => {
+    test("レスポンスが null ならエラーメッセージが表示される", () => {
+      // Given
       mockUseParams.mockReturnValue({ userId: "999" });
       mockUseLazyLoadQuery.mockReturnValue({ user: null });
 
+      // When
       render(<UserDetailPage />);
+
+      // Then
       expect(screen.getByText("User Not Found. ID: 999")).toBeInTheDocument();
     });
   });

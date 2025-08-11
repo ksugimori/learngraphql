@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { useLazyLoadQuery } from "react-relay";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { UsersPage } from "./index";
 
@@ -12,7 +12,11 @@ vi.mock("react-relay", () => ({
 const mockUseLazyLoadQuery = vi.mocked(useLazyLoadQuery);
 
 describe("UsersPage", () => {
-  it("renders users list", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test("レスポンスで返されたユーザー名のリストが表示される", () => {
     // Given
     mockUseLazyLoadQuery.mockReturnValue({
       users: [
