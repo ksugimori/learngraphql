@@ -6,9 +6,7 @@ import type React from "react";
 
 export const HomePage: React.FC = () => {
   return (
-    <main>
-      <h1>Simple TODO</h1>
-
+    <section>
       <nav className={styles.navigation}>
         <ul>
           <li>
@@ -19,6 +17,6 @@ export const HomePage: React.FC = () => {
           </li>
         </ul>
       </nav>
-    </main>
+    </section>
   );
 };

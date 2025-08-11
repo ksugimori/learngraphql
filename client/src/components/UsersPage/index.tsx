@@ -19,13 +19,13 @@ export const UsersPage: React.FC = () => {
   );
 
   return (
-    <main>
-      <h1>Users</h1>
+    <section>
+      <h2>Users</h2>
       <ul className={styles.list}>
         {users.map((u) => (
           <li key={u.id}>{u.name}</li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 };

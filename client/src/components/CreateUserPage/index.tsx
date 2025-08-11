@@ -1,4 +1,3 @@
-
 import { graphql, useMutation } from "react-relay";
 import { useNavigate } from "react-router-dom";
 
@@ -31,8 +30,8 @@ export const CreateUserPage: React.FC = () => {
   };
 
   return (
-    <main>
-      <h1>Create User</h1>
+    <section>
+      <h2>Create User</h2>
 
       <form className={styles.form} onSubmit={onSubmit}>
         <label>
@@ -41,6 +40,6 @@ export const CreateUserPage: React.FC = () => {
         </label>
         <button type="submit">Submit</button>
       </form>
-    </main>
+    </section>
   );
 };

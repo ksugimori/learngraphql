@@ -24,21 +24,21 @@ export const UserDetailPage: React.FC = () => {
 
   if (user === null || user === undefined) {
     return (
-      <main>
-        <h1>User</h1>
+      <section>
+        <h2>User</h2>
         <p>User Not Found. ID: {userId}</p>
-      </main>
+      </section>
     );
   }
 
   return (
-    <main>
-      <h1>User: {user.name}</h1>
+    <section>
+      <h2>User: {user.name}</h2>
       <ul>
         {user.todos.map((u) => (
           <li key={u.id}>{u.title}</li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 };
