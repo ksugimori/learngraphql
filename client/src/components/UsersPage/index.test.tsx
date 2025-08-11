@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { useLazyLoadQuery } from "react-relay";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { UsersPage } from "./index";
@@ -26,7 +27,11 @@ describe("UsersPage", () => {
     });
 
     // When
-    render(<UsersPage />);
+    render(
+      <MemoryRouter>
+        <UsersPage />
+      </MemoryRouter>
+    );
 
     // Then
     expect(screen.getByText("Users")).toBeInTheDocument();
