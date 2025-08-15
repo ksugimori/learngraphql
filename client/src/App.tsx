@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
-import { CreateUserPage } from "./components/CreateUserPage";
-import { HomePage } from "./components/HomePage";
+
 import { Layout } from "./components/Layout";
-import { UserDetailPage } from "./components/UserDetailPage";
-import { UsersPage } from "./components/UsersPage";
+import { HomePage } from "./components/pages/HomePage";
+import { CreateUserPage } from "./components/pages/users/CreateUserPage";
+import { UserDetailPage } from "./components/pages/users/UserDetailPage";
+import { UsersPage } from "./components/pages/users/UsersPage";
 
 function App() {
   return (
