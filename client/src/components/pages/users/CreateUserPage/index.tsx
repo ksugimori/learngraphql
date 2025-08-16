@@ -24,7 +24,7 @@ export const CreateUserPage: React.FC = () => {
     commitMutation({
       variables: { input: { name } },
       onCompleted: ({ createUser }) => {
-        navigate(`/users/${createUser.id}`);
+        navigate(`/users/${createUser?.id}`);
       },
     });
   };
