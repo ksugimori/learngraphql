@@ -2,6 +2,7 @@ import { graphql, useLazyLoadQuery } from "react-relay";
 import { Link } from "react-router-dom";
 
 import styles from "./style.module.css";
+import { UserCard } from "../../../UserCard";
 
 import type { UsersPageQuery } from "./__generated__/UsersPageQuery.graphql";
 import type React from "react";
@@ -12,7 +13,7 @@ export const UsersPage: React.FC = () => {
       query UsersPageQuery {
         users {
           id
-          name
+          ...UserCard_user
         }
       }
     `,
@@ -23,9 +24,11 @@ export const UsersPage: React.FC = () => {
     <section>
       <h2>Users</h2>
       <ul className={styles.list}>
-        {users.map((u) => (
-          <li key={u.id}>
-            <Link to={`/users/${u.id}`}>{u.name}</Link>
+        {users.map((user) => (
+          <li key={user.id}>
+            <Link to={`/users/${user.id}`}>
+              <UserCard userRef={user} />
+            </Link>
           </li>
         ))}
       </ul>
