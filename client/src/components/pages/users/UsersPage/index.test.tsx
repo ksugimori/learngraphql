@@ -7,6 +7,7 @@ import { UsersPage } from "./index";
 
 vi.mock("react-relay", () => ({
   useLazyLoadQuery: vi.fn(),
+  useFragment: vi.fn((_, data) => data),
   graphql: () => ({}),
 }));
 
