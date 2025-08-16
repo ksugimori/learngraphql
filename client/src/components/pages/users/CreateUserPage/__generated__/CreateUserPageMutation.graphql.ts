@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<75efd4bb3a4ea4ada1ef66c382afda0c>>
+ * @generated SignedSource<<37449f1dde60df41fa57d0761ca583fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type CreateUserPageMutation$variables = {
 export type CreateUserPageMutation$data = {
   readonly createUser: {
     readonly id: string;
-  };
+  } | null | undefined;
 };
 export type CreateUserPageMutation = {
   response: CreateUserPageMutation$data;

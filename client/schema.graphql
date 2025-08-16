@@ -50,10 +50,10 @@ input CreateUserInput {
 """更新系処理のルート型"""
 type Mutation {
   """Todo を作成する。"""
-  createTodo(input: CreateTodoInput!): Todo!
+  createTodo(input: CreateTodoInput!): Todo
 
   """Todo を更新する。"""
-  updateTodo(input: UpdateTodoInput!): Todo!
+  updateTodo(input: UpdateTodoInput!): Todo
 
   """
   Todo を削除する。
@@ -67,14 +67,14 @@ type Mutation {
   
   REST の `POST /users` に対応
   """
-  createUser(input: CreateUserInput!): User!
+  createUser(input: CreateUserInput!): User
 
   """
   ユーザーを更新する。
   
   REST の `PUT /users/{id}`、`PATCH /users/{id}` に対応
   """
-  updateUser(input: UpdateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User
 
   """
   ユーザーを削除する。
@@ -119,7 +119,7 @@ type Todo {
   title: String!
 
   """完了済か？"""
-  isCompleted: Boolean
+  isCompleted: Boolean!
 }
 
 """Todo更新の input"""

@@ -11,7 +11,7 @@ type Todo {
     title: String!
 
     "完了済か？"
-    isCompleted: Boolean
+    isCompleted: Boolean!
 }
 
 """

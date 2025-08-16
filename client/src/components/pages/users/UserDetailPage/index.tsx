@@ -1,6 +1,9 @@
 import { graphql, useLazyLoadQuery } from "react-relay";
 import { useParams } from "react-router-dom";
 
+import styles from "./style.module.css";
+import { TodoCard } from "../../../TodoCard";
+
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 import type React from "react";
 
@@ -13,8 +16,7 @@ export const UserDetailPage: React.FC = () => {
           name
           todos {
             id
-            title
-            isCompleted
+            ...TodoCard_todo
           }
         }
       }
@@ -34,9 +36,11 @@ export const UserDetailPage: React.FC = () => {
   return (
     <section>
       <h2>User: {user.name}</h2>
-      <ul>
-        {user.todos.map((u) => (
-          <li key={u.id}>{u.title}</li>
+      <ul className={styles.cardList}>
+        {user.todos.map((todoRef) => (
+          <li key={todoRef.id}>
+            <TodoCard todoRef={todoRef} />
+          </li>
         ))}
       </ul>
     </section>

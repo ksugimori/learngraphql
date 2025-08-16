@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8593fbec6fa17b3266cba2b83cf4333e>>
+ * @generated SignedSource<<17e7835fd2b49a3e4ea5bf7a5ca9c124>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type UserDetailPageQuery$variables = {
   userId: string;
 };
@@ -17,8 +18,7 @@ export type UserDetailPageQuery$data = {
     readonly name: string;
     readonly todos: ReadonlyArray<{
       readonly id: string;
-      readonly isCompleted: boolean | null | undefined;
-      readonly title: string;
+      readonly " $fragmentSpreads": FragmentRefs<"TodoCard_todo">;
     }>;
   } | null | undefined;
 };
@@ -55,32 +55,6 @@ v3 = {
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "Todo",
-  "kind": "LinkedField",
-  "name": "todos",
-  "plural": true,
-  "selections": [
-    (v3/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "title",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "isCompleted",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
 };
 return {
   "fragment": {
@@ -98,7 +72,23 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v4/*: any*/)
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Todo",
+            "kind": "LinkedField",
+            "name": "todos",
+            "plural": true,
+            "selections": [
+              (v3/*: any*/),
+              {
+                "args": null,
+                "kind": "FragmentSpread",
+                "name": "TodoCard_todo"
+              }
+            ],
+            "storageKey": null
+          }
         ],
         "storageKey": null
       }
@@ -121,7 +111,32 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
-          (v4/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "Todo",
+            "kind": "LinkedField",
+            "name": "todos",
+            "plural": true,
+            "selections": [
+              (v3/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "title",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "isCompleted",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
           (v3/*: any*/)
         ],
         "storageKey": null
@@ -129,16 +144,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "99a25bd81dfe8e95c2aa7ebdae9dfbbe",
+    "cacheID": "49a594b3ac483285018d6366784f3caa",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    todos {\n      id\n      title\n      isCompleted\n    }\n    id\n  }\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    todos {\n      id\n      ...TodoCard_todo\n    }\n    id\n  }\n}\n\nfragment TodoCard_todo on Todo {\n  title\n  isCompleted\n}\n"
   }
 };
 })();
 
-(node as any).hash = "48b881b179c42c9e03df5885eb021584";
+(node as any).hash = "c7fd15e2660c111fd9b52023f944a98b";
 
 export default node;
