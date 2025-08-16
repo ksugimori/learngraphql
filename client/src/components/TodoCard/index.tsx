@@ -1,6 +1,7 @@
 import { graphql, useFragment } from "react-relay";
 
 import styles from "./style.module.css";
+import { Card } from "../Card";
 
 import type { TodoCard_todo$key } from "./__generated__/TodoCard_todo.graphql";
 import type React from "react";
@@ -21,11 +22,10 @@ export const TodoCard: React.FC<Props> = ({ todoRef }) => {
   );
 
   return (
-    // TODO: ユーザーと共通化するため Card コンポーネントをつくる
-    <div className={styles.root}>
+    <Card>
       <span className={styles.title}>{title}</span>
       <button disabled={isCompleted}>完了</button>
       <button>削除</button>
-    </div>
+    </Card>
   );
 };
