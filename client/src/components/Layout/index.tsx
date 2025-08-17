@@ -8,7 +8,7 @@ export const Layout = () => {
   return (
     <div className={styles.root}>
       <Header />
-      <main>
+      <main className={styles.main}>
         <Outlet /> {/* ここに各ページのコンテンツが表示される */}
       </main>
     </div>
