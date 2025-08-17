@@ -7,7 +7,7 @@ import {
 } from "react-relay";
 import { useParams } from "react-router-dom";
 
-import { CreateUserForm } from "./CreateUserForm";
+import { CreateTodoForm } from "./CreateTodoForm";
 import { TodoList } from "./TodoList";
 
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
@@ -21,41 +21,6 @@ const query = graphql`
     }
   }
 `;
-
-type UserDetailContentProps = {
-  queryRef: PreloadedQuery<UserDetailPageQuery>;
-  userId: string;
-  onRefresh: () => void;
-};
-
-const UserDetailContent: React.FC<UserDetailContentProps> = ({
-  queryRef,
-  userId,
-  onRefresh,
-}) => {
-  const { user } = usePreloadedQuery<UserDetailPageQuery>(query, queryRef);
-
-  if (user === null || user === undefined) {
-    return (
-      <section>
-        <h2>User</h2>
-        <p>User Not Found. ID: {userId}</p>
-      </section>
-    );
-  }
-
-  return (
-    <section>
-      <h2>User: {user.name}</h2>
-
-      <h3>Create Todo</h3>
-      <CreateUserForm userId={userId} onRefresh={onRefresh} />
-
-      <h3>All Todos</h3>
-      <TodoList todosRef={user} />
-    </section>
-  );
-};
 
 export const UserDetailPage: React.FC = () => {
   const { userId = "empty" } = useParams();
@@ -83,5 +48,34 @@ export const UserDetailPage: React.FC = () => {
       userId={userId}
       onRefresh={handleRefresh}
     />
+  );
+};
+
+const UserDetailContent: React.FC<{
+  queryRef: PreloadedQuery<UserDetailPageQuery>;
+  userId: string;
+  onRefresh: () => void;
+}> = ({ queryRef, userId, onRefresh }) => {
+  const { user } = usePreloadedQuery<UserDetailPageQuery>(query, queryRef);
+
+  if (user === null || user === undefined) {
+    return (
+      <section>
+        <h2>User</h2>
+        <p>User Not Found.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section>
+      <h2>User: {user.name}</h2>
+
+      <h3>Create Todo</h3>
+      <CreateTodoForm userId={userId} onComplete={onRefresh} />
+
+      <h3>All Todos</h3>
+      <TodoList todosRef={user} />
+    </section>
   );
 };
