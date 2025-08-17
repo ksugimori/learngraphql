@@ -1,12 +1,30 @@
 import { render, screen } from "@testing-library/react";
-import { useLazyLoadQuery } from "react-relay";
+import {
+  useQueryLoader,
+  usePreloadedQuery,
+  useMutation,
+  useRelayEnvironment,
+} from "react-relay";
 import { useParams } from "react-router-dom";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { UserDetailPage } from "./index";
 
+type MockRelayEnvironment = {
+  getStore: () => {
+    invalidateStore: () => void;
+  };
+};
+
+type MockQueryRef = {
+  kind: string;
+};
+
 vi.mock("react-relay", () => ({
-  useLazyLoadQuery: vi.fn(),
+  useQueryLoader: vi.fn(),
+  usePreloadedQuery: vi.fn(),
+  useMutation: vi.fn(),
+  useRelayEnvironment: vi.fn(),
   useFragment: vi.fn((_, data) => data),
   graphql: () => ({}),
 }));
@@ -15,19 +33,59 @@ vi.mock("react-router-dom", () => ({
   useParams: vi.fn(),
 }));
 
-const mockUseLazyLoadQuery = vi.mocked(useLazyLoadQuery);
+const mockUseQueryLoader = vi.mocked(useQueryLoader);
+const mockUsePreloadedQuery = vi.mocked(usePreloadedQuery);
+const mockUseMutation = vi.mocked(useMutation);
+const mockUseRelayEnvironment = vi.mocked(useRelayEnvironment);
 const mockUseParams = vi.mocked(useParams);
 
 describe("UserDetailPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // useRelayEnvironment のモック
+    const mockEnvironment: MockRelayEnvironment = {
+      getStore: () => ({
+        invalidateStore: vi.fn(),
+      }),
+    };
+    mockUseRelayEnvironment.mockReturnValue(mockEnvironment as never);
+
+    // useMutation のモック
+    mockUseMutation.mockReturnValue([vi.fn(), false]);
+  });
+
+  describe("ローディング状態", () => {
+    test("queryRef が null の場合は Loading が表示される", () => {
+      // Given
+      mockUseParams.mockReturnValue({ userId: "1" });
+
+      // queryRef が null の状態
+      mockUseQueryLoader.mockReturnValue([null, vi.fn(), vi.fn()]);
+
+      // When
+      render(<UserDetailPage />);
+
+      // Then
+      expect(screen.getByText("Loading...")).toBeInTheDocument();
+    });
   });
 
   describe("正常系", () => {
     test("レスポンスのユーザー名タイトルに表示される", () => {
       // Given
       mockUseParams.mockReturnValue({ userId: "1" });
-      mockUseLazyLoadQuery.mockReturnValue({
+
+      // useQueryLoader のモック（queryRef が存在する状態）
+      const mockQueryRef: MockQueryRef = { kind: "PreloadedQuery" };
+      mockUseQueryLoader.mockReturnValue([
+        mockQueryRef as never,
+        vi.fn(),
+        vi.fn(),
+      ]);
+
+      // usePreloadedQuery のモック
+      mockUsePreloadedQuery.mockReturnValue({
         user: {
           name: "Alice",
           todos: [],
@@ -44,7 +102,15 @@ describe("UserDetailPage", () => {
     test("ユーザーに紐づく Todo のタイトルが表示される", () => {
       // Given
       mockUseParams.mockReturnValue({ userId: "1" });
-      mockUseLazyLoadQuery.mockReturnValue({
+
+      const mockQueryRef: MockQueryRef = { kind: "PreloadedQuery" };
+      mockUseQueryLoader.mockReturnValue([
+        mockQueryRef as never,
+        vi.fn(),
+        vi.fn(),
+      ]);
+
+      mockUsePreloadedQuery.mockReturnValue({
         user: {
           name: "Alice",
           todos: [
@@ -67,13 +133,21 @@ describe("UserDetailPage", () => {
     test("レスポンスが null ならエラーメッセージが表示される", () => {
       // Given
       mockUseParams.mockReturnValue({ userId: "999" });
-      mockUseLazyLoadQuery.mockReturnValue({ user: null });
+
+      const mockQueryRef: MockQueryRef = { kind: "PreloadedQuery" };
+      mockUseQueryLoader.mockReturnValue([
+        mockQueryRef as never,
+        vi.fn(),
+        vi.fn(),
+      ]);
+
+      mockUsePreloadedQuery.mockReturnValue({ user: null });
 
       // When
       render(<UserDetailPage />);
 
       // Then
-      expect(screen.getByText("User Not Found. ID: 999")).toBeInTheDocument();
+      expect(screen.getByText("User Not Found.")).toBeInTheDocument();
     });
   });
 });
