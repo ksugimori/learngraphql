@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<17e7835fd2b49a3e4ea5bf7a5ca9c124>>
+ * @generated SignedSource<<98c58ace312b68003223a98b9e836cd1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,10 +16,7 @@ export type UserDetailPageQuery$variables = {
 export type UserDetailPageQuery$data = {
   readonly user: {
     readonly name: string;
-    readonly todos: ReadonlyArray<{
-      readonly id: string;
-      readonly " $fragmentSpreads": FragmentRefs<"TodoCard_todo">;
-    }>;
+    readonly " $fragmentSpreads": FragmentRefs<"TodoListFragment">;
   } | null | undefined;
 };
 export type UserDetailPageQuery = {
@@ -73,21 +70,9 @@ return {
         "selections": [
           (v2/*: any*/),
           {
-            "alias": null,
             "args": null,
-            "concreteType": "Todo",
-            "kind": "LinkedField",
-            "name": "todos",
-            "plural": true,
-            "selections": [
-              (v3/*: any*/),
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "TodoCard_todo"
-              }
-            ],
-            "storageKey": null
+            "kind": "FragmentSpread",
+            "name": "TodoListFragment"
           }
         ],
         "storageKey": null
@@ -144,16 +129,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "49a594b3ac483285018d6366784f3caa",
+    "cacheID": "604cbe1eb816bd1695c987736a83496f",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    todos {\n      id\n      ...TodoCard_todo\n    }\n    id\n  }\n}\n\nfragment TodoCard_todo on Todo {\n  title\n  isCompleted\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoCard_todo on Todo {\n  title\n  isCompleted\n}\n\nfragment TodoListFragment on User {\n  todos {\n    id\n    ...TodoCard_todo\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c7fd15e2660c111fd9b52023f944a98b";
+(node as any).hash = "9320dc0d5b181534f757dc1b40dd5cd8";
 
 export default node;

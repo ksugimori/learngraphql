@@ -1,38 +1,39 @@
-import { graphql, useLazyLoadQuery, useMutation } from "react-relay";
+import { useEffect } from "react";
+import {
+  graphql,
+  useQueryLoader,
+  usePreloadedQuery,
+  type PreloadedQuery,
+} from "react-relay";
 import { useParams } from "react-router-dom";
 
-import styles from "./style.module.css";
-import { TodoCard } from "../../../TodoCard";
+import { CreateUserForm } from "./CreateUserForm";
+import { TodoList } from "./TodoList";
 
-import type { UserDetailPageCreateTodoMutation } from "./__generated__/UserDetailPageCreateTodoMutation.graphql";
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 import type React from "react";
 
-export const UserDetailPage: React.FC = () => {
-  const { userId = "empty" } = useParams();
-  const { user } = useLazyLoadQuery<UserDetailPageQuery>(
-    graphql`
-      query UserDetailPageQuery($userId: ID!) {
-        user(id: $userId) {
-          name
-          todos {
-            id
-            ...TodoCard_todo
-          }
-        }
-      }
-    `,
-    { userId }
-  );
+const query = graphql`
+  query UserDetailPageQuery($userId: ID!) {
+    user(id: $userId) {
+      name
+      ...TodoListFragment
+    }
+  }
+`;
 
-  const [commitCreateTodoMutation] =
-    useMutation<UserDetailPageCreateTodoMutation>(graphql`
-      mutation UserDetailPageCreateTodoMutation($input: CreateTodoInput!) {
-        createTodo(input: $input) {
-          id
-        }
-      }
-    `);
+type UserDetailContentProps = {
+  queryRef: PreloadedQuery<UserDetailPageQuery>;
+  userId: string;
+  onRefresh: () => void;
+};
+
+const UserDetailContent: React.FC<UserDetailContentProps> = ({
+  queryRef,
+  userId,
+  onRefresh,
+}) => {
+  const { user } = usePreloadedQuery<UserDetailPageQuery>(query, queryRef);
 
   if (user === null || user === undefined) {
     return (
@@ -43,39 +44,44 @@ export const UserDetailPage: React.FC = () => {
     );
   }
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const title = formData.get("title")?.toString() ?? "";
-
-    commitCreateTodoMutation({
-      variables: { input: { userId, title } },
-      onCompleted: ({ createTodo }) => {
-        console.log(`create Todo: id = ${createTodo?.id}`);
-        // TODO: リロードさせる
-      },
-    });
-  };
-
   return (
     <section>
       <h2>User: {user.name}</h2>
 
       <h3>Create Todo</h3>
-      <form onSubmit={onSubmit}>
-        <input type="hidden" name="userId" value={userId} />
-        <input type="text" placeholder="title" name="title" />
-        <button>Submit</button>
-      </form>
+      <CreateUserForm userId={userId} onRefresh={onRefresh} />
 
       <h3>All Todos</h3>
-      <ul className={styles.cardList}>
-        {user.todos.map((todoRef) => (
-          <li key={todoRef.id}>
-            <TodoCard todoRef={todoRef} />
-          </li>
-        ))}
-      </ul>
+      <TodoList todosRef={user} />
     </section>
+  );
+};
+
+export const UserDetailPage: React.FC = () => {
+  const { userId = "empty" } = useParams();
+
+  const [queryRef, loadQuery, disposeQuery] =
+    useQueryLoader<UserDetailPageQuery>(query);
+
+  useEffect(() => {
+    loadQuery({ userId });
+  }, [userId, loadQuery]);
+
+  const handleRefresh = () => {
+    disposeQuery();
+    loadQuery({ userId }, { fetchPolicy: "network-only" });
+  };
+
+  // queryRef が null の場合はローディング表示
+  if (!queryRef) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <UserDetailContent
+      queryRef={queryRef}
+      userId={userId}
+      onRefresh={handleRefresh}
+    />
   );
 };
