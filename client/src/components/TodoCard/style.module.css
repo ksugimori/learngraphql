@@ -1,5 +1,29 @@
+.root {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 0;
+  gap: 0.5em;
+}
+
 .title {
-  font-weight: 800;
-  margin: 0 auto 0 0;
-  font-size: 1.25em;
+  flex-shrink: 0;
+}
+
+.separator {
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    transparent,
+    transparent 2px,
+    #ccc 2px,
+    #ccc 4px
+  );
+  min-width: 20px;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
 }

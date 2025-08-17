@@ -1,7 +1,6 @@
 import { graphql, useFragment } from "react-relay";
 
 import styles from "./style.module.css";
-import { Card } from "../Card";
 
 import type { TodoCard_todo$key } from "./__generated__/TodoCard_todo.graphql";
 import type React from "react";
@@ -22,10 +21,14 @@ export const TodoCard: React.FC<Props> = ({ todoRef }) => {
   );
 
   return (
-    <Card>
+    <div className={styles.root}>
       <span className={styles.title}>{title}</span>
-      <button disabled={isCompleted}>完了</button>
-      <button>削除</button>
-    </Card>
+      <div className={styles.separator}></div>
+      <div className={styles.buttons}>
+        {/* TODO: アイコン化 */}
+        <button disabled={isCompleted}>Finish</button>
+        <button>Delete</button>
+      </div>
+    </div>
   );
 };
