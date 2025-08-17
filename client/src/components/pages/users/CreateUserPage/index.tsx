@@ -34,10 +34,7 @@ export const CreateUserPage: React.FC = () => {
       <h2>Create User</h2>
 
       <form className={styles.form} onSubmit={onSubmit}>
-        <label>
-          name:
-          <input type="text" name="name" />
-        </label>
+        <input type="text" name="name" placeholder="name" />
         <button type="submit">Submit</button>
       </form>
     </section>

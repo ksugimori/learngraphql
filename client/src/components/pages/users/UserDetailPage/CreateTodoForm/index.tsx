@@ -1,5 +1,7 @@
 import { graphql, useMutation } from "react-relay";
 
+import styles from "./style.module.css";
+
 import type { CreateTodoFormMutation } from "./__generated__/CreateTodoFormMutation.graphql";
 import type { FormEventHandler } from "react";
 import type React from "react";
@@ -37,7 +39,7 @@ export const CreateTodoForm: React.FC<Props> = ({ userId, onComplete }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.root} onSubmit={handleSubmit}>
       <input type="text" placeholder="title" name="title" />
       <button>Submit</button>
     </form>
