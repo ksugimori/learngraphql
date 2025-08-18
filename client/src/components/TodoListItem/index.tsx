@@ -4,11 +4,20 @@ import styles from "./style.module.css";
 
 import type { TodoListItem_todo$key } from "./__generated__/TodoListItem_todo.graphql";
 import type { TodoListItemDeleteMutation } from "./__generated__/TodoListItemDeleteMutation.graphql";
+import type { TodoListItemUpdateMutation } from "./__generated__/TodoListItemUpdateMutation.graphql";
 import type React from "react";
 
 const deleteMutation = graphql`
   mutation TodoListItemDeleteMutation($id: ID!) {
     deleteTodo(id: $id)
+  }
+`;
+
+const updateMutation = graphql`
+  mutation TodoListItemUpdateMutation($input: UpdateTodoInput!) {
+    updateTodo(input: $input) {
+      id
+    }
   }
 `;
 
@@ -35,9 +44,18 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
 
   const [commitDelete] =
     useMutation<TodoListItemDeleteMutation>(deleteMutation);
+  const [commitUpdate] =
+    useMutation<TodoListItemUpdateMutation>(updateMutation);
 
   const handleDelete = () => {
     commitDelete({ variables: { id } });
+    reloadTodoList();
+  };
+
+  const handleComplete = () => {
+    commitUpdate({
+      variables: { input: { id, isCompleted: true } },
+    });
     reloadTodoList();
   };
 
@@ -47,7 +65,9 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
       <div className={styles.separator}></div>
       <div className={styles.buttons}>
         {/* TODO: アイコン化 */}
-        <button disabled={isCompleted}>Finish</button>
+        <button onClick={handleComplete} disabled={isCompleted}>
+          Finish
+        </button>
         <button onClick={handleDelete}>Delete</button>
       </div>
     </div>
