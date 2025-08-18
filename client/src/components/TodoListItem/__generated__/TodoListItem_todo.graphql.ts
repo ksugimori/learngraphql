@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b86684db38d78457f3a372a97e971310>>
+ * @generated SignedSource<<0a5922c2a3a804b9c45ef6b468d6eef5>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,21 +10,21 @@
 
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type TodoCard_todo$data = {
+export type TodoListItem_todo$data = {
   readonly isCompleted: boolean;
   readonly title: string;
-  readonly " $fragmentType": "TodoCard_todo";
+  readonly " $fragmentType": "TodoListItem_todo";
 };
-export type TodoCard_todo$key = {
-  readonly " $data"?: TodoCard_todo$data;
-  readonly " $fragmentSpreads": FragmentRefs<"TodoCard_todo">;
+export type TodoListItem_todo$key = {
+  readonly " $data"?: TodoListItem_todo$data;
+  readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "TodoCard_todo",
+  "name": "TodoListItem_todo",
   "selections": [
     {
       "alias": null,
@@ -45,6 +45,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "14988aa41f63ec6136941bea5062ae4e";
+(node as any).hash = "20e758c89a9e00c655aa4c2ea6bf7d10";
 
 export default node;

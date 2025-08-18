@@ -1,7 +1,7 @@
 import { graphql, useFragment } from "react-relay";
 
 import styles from "./style.module.css";
-import { TodoCard } from "../../../../TodoCard";
+import { TodoListItem } from "../../../../TodoListItem";
 
 import type { TodoListFragment$key } from "./__generated__/TodoListFragment.graphql";
 import type React from "react";
@@ -16,7 +16,7 @@ export const TodoList: React.FC<Props> = ({ todosRef, ...rest }) => {
       fragment TodoListFragment on User {
         todos {
           id
-          ...TodoCard_todo
+          ...TodoListItem_todo
         }
       }
     `,
@@ -27,7 +27,7 @@ export const TodoList: React.FC<Props> = ({ todosRef, ...rest }) => {
     <ul className={styles.root} {...rest}>
       {todos.map((todoRef) => (
         <li key={todoRef.id}>
-          <TodoCard todoRef={todoRef} />
+          <TodoListItem todoRef={todoRef} />
         </li>
       ))}
     </ul>

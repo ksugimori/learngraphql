@@ -8,6 +8,10 @@ import type React from "react";
 
 type Props = {
   userId: string;
+
+  /**
+   * Todo 登録完了時のイベントハンドラ
+   */
   onComplete: () => void;
 };
 

@@ -32,7 +32,7 @@ export const UserDetailPage: React.FC = () => {
     loadQuery({ userId });
   }, [userId, loadQuery]);
 
-  const handleRefresh = () => {
+  const reloadTodoList = () => {
     disposeQuery();
     loadQuery({ userId }, { fetchPolicy: "network-only" });
   };
@@ -46,7 +46,7 @@ export const UserDetailPage: React.FC = () => {
     <UserDetailContent
       queryRef={queryRef}
       userId={userId}
-      onRefresh={handleRefresh}
+      reloadTodoList={reloadTodoList}
     />
   );
 };
@@ -54,8 +54,8 @@ export const UserDetailPage: React.FC = () => {
 const UserDetailContent: React.FC<{
   queryRef: PreloadedQuery<UserDetailPageQuery>;
   userId: string;
-  onRefresh: () => void;
-}> = ({ queryRef, userId, onRefresh }) => {
+  reloadTodoList: () => void;
+}> = ({ queryRef, userId, reloadTodoList }) => {
   const { user } = usePreloadedQuery<UserDetailPageQuery>(query, queryRef);
 
   if (user === null || user === undefined) {
@@ -72,7 +72,7 @@ const UserDetailContent: React.FC<{
       <h2>User: {user.name}</h2>
 
       <h3>Create Todo</h3>
-      <CreateTodoForm userId={userId} onComplete={onRefresh} />
+      <CreateTodoForm userId={userId} onComplete={reloadTodoList} />
 
       <h3>All Todos</h3>
       <TodoList todosRef={user} />

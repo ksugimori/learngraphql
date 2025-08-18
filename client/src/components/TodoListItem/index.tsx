@@ -2,17 +2,17 @@ import { graphql, useFragment } from "react-relay";
 
 import styles from "./style.module.css";
 
-import type { TodoCard_todo$key } from "./__generated__/TodoCard_todo.graphql";
+import type { TodoListItem_todo$key } from "./__generated__/TodoListItem_todo.graphql";
 import type React from "react";
 
 type Props = {
-  todoRef: TodoCard_todo$key;
+  todoRef: TodoListItem_todo$key;
 };
 
-export const TodoCard: React.FC<Props> = ({ todoRef }) => {
+export const TodoListItem: React.FC<Props> = ({ todoRef }) => {
   const { title, isCompleted = false } = useFragment(
     graphql`
-      fragment TodoCard_todo on Todo {
+      fragment TodoListItem_todo on Todo {
         title
         isCompleted
       }

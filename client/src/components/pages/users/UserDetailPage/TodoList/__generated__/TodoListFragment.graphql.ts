@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e603a5fdf2f5841867b7be46826b97a0>>
+ * @generated SignedSource<<2300d957a689aaeb397d2b98a8b5357a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type TodoListFragment$data = {
   readonly todos: ReadonlyArray<{
     readonly id: string;
-    readonly " $fragmentSpreads": FragmentRefs<"TodoCard_todo">;
+    readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
   }>;
   readonly " $fragmentType": "TodoListFragment";
 };
@@ -46,7 +46,7 @@ const node: ReaderFragment = {
         {
           "args": null,
           "kind": "FragmentSpread",
-          "name": "TodoCard_todo"
+          "name": "TodoListItem_todo"
         }
       ],
       "storageKey": null
@@ -56,6 +56,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "3a13cf6397354bb4ec2cb7be2fcd221c";
+(node as any).hash = "34fa5b6f3140c66fe280f53d7252ec93";
 
 export default node;
