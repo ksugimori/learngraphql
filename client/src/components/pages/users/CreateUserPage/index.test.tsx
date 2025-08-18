@@ -39,7 +39,11 @@ describe("CreateUserPage", () => {
     // When
     render(<CreateUserPage />);
 
-    const submitButton = screen.getByRole("button", { name: /submit/i });
+    const input = screen.getByLabelText<HTMLInputElement>("name-input");
+    const submitButton = screen.getByRole("button", {
+      name: /submit/i,
+    });
+    input.value = "new user";
     submitButton.click();
 
     // Then
