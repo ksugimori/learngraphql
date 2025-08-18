@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f9f4256b77022304fea97382c26d6c5d>>
+ * @generated SignedSource<<67464a47e625e82f6bf0423b41d88250>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -129,12 +129,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "68c8f5a843ac5962b089859e02e7d372",
+    "cacheID": "f56c0748f0f0a6a43614bf6c2d67feb3",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos {\n    id\n    ...TodoListItem_todo\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  title\n  isCompleted\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos {\n    id\n    ...TodoListItem_todo\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
   }
 };
 })();

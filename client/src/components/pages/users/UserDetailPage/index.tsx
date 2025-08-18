@@ -75,7 +75,7 @@ const UserDetailContent: React.FC<{
       <CreateTodoForm userId={userId} onComplete={reloadTodoList} />
 
       <h3>All Todos</h3>
-      <TodoList todosRef={user} />
+      <TodoList todosRef={user} reloadTodoList={reloadTodoList} />
     </section>
   );
 };
