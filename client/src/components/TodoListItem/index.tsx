@@ -64,9 +64,8 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
       <span className={styles.title}>{title}</span>
       <div className={styles.separator}></div>
       <div className={styles.buttons}>
-        {/* TODO: アイコン化 */}
         <button onClick={handleComplete} disabled={isCompleted}>
-          Finish
+          Complete
         </button>
         <button onClick={handleDelete}>Delete</button>
       </div>

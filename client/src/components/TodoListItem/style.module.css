@@ -29,5 +29,10 @@
 
   button:disabled {
     background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+    &:hover {
+      color: #fff;
+    }
   }
 }
