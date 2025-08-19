@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Yusei Magic", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,6 +12,7 @@ body {
 }
 
 button {
+  font-family: "Yusei Magic", sans-serif;
   border: 1px solid #000;
   padding: 0.5em 1em;
   font-size: 1em;
@@ -26,6 +27,7 @@ button {
 }
 
 input[type="text"] {
+  font-family: "Yusei Magic", sans-serif;
   padding: 0.5em;
   border: 1px solid #000;
   font-size: 1em;
