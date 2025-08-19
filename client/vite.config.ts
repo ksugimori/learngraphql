@@ -11,6 +11,15 @@ export default defineConfig({
       include: ["src/**/*.ts", "src/**/*.tsx"],
     }),
   ],
+  resolve: {
+    alias: {
+      "@": "/src",
+      "@/components": "/src/components",
+      "@/pages": "/src/components/pages",
+      "@/utils": "/src/utils",
+      "@/types": "/src/types",
+    },
+  },
   test: {
     globals: true,
     environment: "jsdom",

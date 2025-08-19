@@ -7,11 +7,11 @@ import {
 } from "react-relay";
 import { useParams } from "react-router-dom";
 
-import { CreateTodoForm } from "../../../CreateTodoForm";
-import { TodoList } from "../../../TodoList";
-
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 import type React from "react";
+
+import { CreateTodoForm } from "@/components/CreateTodoForm";
+import { TodoList } from "@/components/TodoList";
 
 const query = graphql`
   query UserDetailPageQuery($userId: ID!) {

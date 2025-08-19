@@ -1,10 +1,11 @@
 import { graphql, useFragment } from "react-relay";
 
 import styles from "./style.module.css";
-import { TodoListItem } from "../TodoListItem";
 
 import type { TodoListFragment$key } from "./__generated__/TodoListFragment.graphql";
 import type React from "react";
+
+import { TodoListItem } from "@/components/TodoListItem";
 
 type Props = {
   todosRef: TodoListFragment$key;
