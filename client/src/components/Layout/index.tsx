@@ -6,7 +6,7 @@ import styles from "./style.module.css";
 
 export const Layout = () => {
   return (
-    <div className={styles.root}>
+    <div>
       <Header />
       <main className={styles.main}>
         <Outlet /> {/* ここに各ページのコンテンツが表示される */}

@@ -7,6 +7,10 @@
   background-color: #fff;
 }
 
+body {
+  margin: 0;
+}
+
 button {
   border: 1px solid #000;
   padding: 0.5em 1em;
