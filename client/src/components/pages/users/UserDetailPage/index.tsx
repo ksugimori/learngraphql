@@ -7,8 +7,8 @@ import {
 } from "react-relay";
 import { useParams } from "react-router-dom";
 
-import { CreateTodoForm } from "./CreateTodoForm";
-import { TodoList } from "./TodoList";
+import { CreateTodoForm } from "../../../CreateTodoForm";
+import { TodoList } from "../../../TodoList";
 
 import type { UserDetailPageQuery } from "./__generated__/UserDetailPageQuery.graphql";
 import type React from "react";
