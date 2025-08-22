@@ -6,6 +6,8 @@ import styles from "./style.module.css";
 import type { UsersPageQuery } from "./__generated__/UsersPageQuery.graphql";
 import type React from "react";
 
+import { ListItem } from "@/components/ListItem";
+
 export const UsersPage: React.FC = () => {
   const { users } = useLazyLoadQuery<UsersPageQuery>(
     graphql`
@@ -25,7 +27,10 @@ export const UsersPage: React.FC = () => {
       <ul className={styles.list}>
         {users.map((user) => (
           <li key={user.id}>
-            <Link to={`/users/${user.id}`}>{user.name}</Link>
+            <ListItem
+              left={user.name}
+              right={<Link to={`/users/${user.id}`}>Detail</Link>}
+            />
           </li>
         ))}
       </ul>
