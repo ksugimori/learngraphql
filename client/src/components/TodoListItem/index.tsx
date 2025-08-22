@@ -1,5 +1,6 @@
 import { graphql, useFragment, useMutation } from "react-relay";
 
+import { ListItem } from "../ListItem";
 import styles from "./style.module.css";
 
 import type { TodoListItem_todo$key } from "./__generated__/TodoListItem_todo.graphql";
@@ -60,15 +61,16 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
   };
 
   return (
-    <div className={styles.root}>
-      <span className={styles.title}>{title}</span>
-      <div className={styles.separator}></div>
-      <div className={styles.buttons}>
-        <button onClick={handleComplete} disabled={isCompleted}>
-          Complete
-        </button>
-        <button onClick={handleDelete}>Delete</button>
-      </div>
-    </div>
+    <ListItem
+      left={title}
+      right={
+        <div className={styles.buttons}>
+          <button onClick={handleComplete} disabled={isCompleted}>
+            Complete
+          </button>
+          <button onClick={handleDelete}>Delete</button>
+        </div>
+      }
+    />
   );
 };
