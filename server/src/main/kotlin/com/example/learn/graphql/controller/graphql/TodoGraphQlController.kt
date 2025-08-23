@@ -58,5 +58,4 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
         todoRepository.deleteById(todoId)
         return id
     }
-
 }

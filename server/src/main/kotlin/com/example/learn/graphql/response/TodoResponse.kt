@@ -7,7 +7,7 @@ data class TodoResponse(
     override val id: NodeId,
     val userId: Long,
     val title: String,
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
 ) : Node {
     companion object {
         /**
@@ -17,7 +17,7 @@ data class TodoResponse(
             id = NodeId(todo.javaClass.simpleName, todo.id ?: 0L),
             userId = todo.userId,
             title = todo.title,
-            isCompleted = todo.isCompleted
+            isCompleted = todo.isCompleted,
         )
     }
 }
