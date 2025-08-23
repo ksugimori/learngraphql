@@ -49,15 +49,17 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, onChange }) => {
     useMutation<TodoListItemUpdateMutation>(updateMutation);
 
   const handleDelete = () => {
-    commitDelete({ variables: { id } });
-    onChange();
+    commitDelete({
+      variables: { id },
+      onCompleted: onChange,
+    });
   };
 
   const handleComplete = () => {
     commitUpdate({
       variables: { input: { id, isCompleted: true } },
+      onCompleted: onChange,
     });
-    onChange();
   };
 
   return (
