@@ -115,7 +115,7 @@ class TodoGraphQlControllerTest {
         val document = """
             mutation {
                 createTodo(input: {
-                    userId: "111",
+                    userId: "$NODEID_TODO_111",
                     title: "テスト"
                 }) {
                     id

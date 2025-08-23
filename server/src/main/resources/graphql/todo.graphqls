@@ -1,7 +1,7 @@
 """
 タスク
 """
-type Todo {
+type Todo implements Node {
     id: ID!
 
     "ユーザーID"

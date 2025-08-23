@@ -1,7 +1,7 @@
 """
 ユーザー
 """
-type User {
+type User implements Node {
     id: ID!
 
     "ユーザー名"

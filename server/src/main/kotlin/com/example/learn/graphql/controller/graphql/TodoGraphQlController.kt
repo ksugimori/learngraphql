@@ -30,7 +30,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     fun createTodo(@Argument input: CreateTodoInput): TodoResponse {
         val todo = Todo(
             id = null,
-            userId = input.userId,
+            userId = NodeId(input.userId).asLong(),
             title = input.title,
             isCompleted = false, // 新規登録時は必ず false
         )
