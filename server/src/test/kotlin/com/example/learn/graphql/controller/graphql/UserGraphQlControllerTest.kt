@@ -21,6 +21,15 @@ import kotlin.test.assertEquals
 @GraphQlTest(UserGraphQlController::class)
 @Import(GraphQlExceptionResolver::class)
 class UserGraphQlControllerTest {
+    companion object {
+        const val NODE_ID_TODO_100 = "VG9kbzoxMDA=" // Base64.encode("Todo:100")
+        const val NODE_ID_TODO_200 = "VG9kbzoyMDA=" // Base64.encode("Todo:200")
+        const val NODE_ID_TODO_999 = "VG9kbzo5OTk=" // Base64.encode("Todo:999")
+
+        const val NODE_ID_USER_100 = "VXNlcjoxMDA=" // Base64.encode("User:100")
+        const val NODE_ID_USER_200 = "VXNlcjoyMDA=" // Base64.encode("User:200")
+        const val NODE_ID_USER_999 = "VXNlcjo5OTk=" // Base64.encode("User:999")
+    }
 
     @Autowired
     private lateinit var graphQlTester: GraphQlTester
@@ -33,12 +42,12 @@ class UserGraphQlControllerTest {
 
     @Test
     fun `query - user - TODO が紐づかない場合`() {
-        every { userRepository.findByIdOrNull(eq(1)) } returns User(id = 1, name = "Test User")
-        every { todoRepository.findByUserId(eq(1)) } returns emptyList()
+        every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
+        every { todoRepository.findByUserId(eq(100)) } returns emptyList()
 
         val document = """
             query {
-                user(id: "1") {
+                user(id: "$NODE_ID_USER_100") {
                     id
                     name
                     todos {
@@ -52,7 +61,7 @@ class UserGraphQlControllerTest {
 
         val expected = """
                 {
-                    "id": "1",
+                    "id": "$NODE_ID_USER_100",
                     "name": "Test User",
                     "todos": []
                 }
@@ -65,11 +74,11 @@ class UserGraphQlControllerTest {
 
     @Test
     fun `query - user - TODO が紐づいている場合`() {
-        every { userRepository.findByIdOrNull(eq(111)) } returns User(id = 111, name = "Test User")
-        every { todoRepository.findByUserId(eq(111)) } returns listOf(
+        every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
+        every { todoRepository.findByUserId(eq(100)) } returns listOf(
             Todo(
-                id = 222,
-                userId = 111,
+                id = 200,
+                userId = 100,
                 title = "test-title",
                 isCompleted = true,
             ),
@@ -77,7 +86,7 @@ class UserGraphQlControllerTest {
 
         val document = """
             query {
-                user(id: "111") {
+                user(id: "$NODE_ID_USER_100") {
                     id
                     name
                     todos {
@@ -91,11 +100,11 @@ class UserGraphQlControllerTest {
 
         val expected = """
                 {
-                    "id": "111",
+                    "id": "$NODE_ID_USER_100",
                     "name": "Test User",
                     "todos": [
                         {
-                            "id": "222",
+                            "id": "$NODE_ID_TODO_200",
                             "title": "test-title",
                             "isCompleted": true
                         }
@@ -111,18 +120,18 @@ class UserGraphQlControllerTest {
     @Test
     fun `query - users`() {
         every { userRepository.findAll() } returns listOf(
-            User(id = 111, name = "ひとりめ"),
-            User(id = 222, name = "ふたりめ"),
+            User(id = 100, name = "ひとりめ"),
+            User(id = 200, name = "ふたりめ"),
         )
-        every { todoRepository.findByUserId(eq(111)) } returns listOf(
+        every { todoRepository.findByUserId(eq(100)) } returns listOf(
             Todo(
                 id = 999,
-                userId = 111,
+                userId = 100,
                 title = "test-title",
                 isCompleted = true,
             ),
         )
-        every { todoRepository.findByUserId(eq(222)) } returns emptyList()
+        every { todoRepository.findByUserId(eq(200)) } returns emptyList()
 
         val document = """
             query {
@@ -141,18 +150,18 @@ class UserGraphQlControllerTest {
         val expected = """
             [
                 {
-                    "id": "111",
+                    "id": "$NODE_ID_USER_100",
                     "name": "ひとりめ",
                     "todos": [
                         {
-                            "id": "999",
+                            "id": "$NODE_ID_TODO_999",
                             "title": "test-title",
                             "isCompleted": true
                         }
                     ]
                 },
                 {
-                    "id": "222",
+                    "id": "$NODE_ID_USER_200",
                     "name": "ふたりめ",
                     "todos": []
                 }
@@ -180,7 +189,7 @@ class UserGraphQlControllerTest {
 
         val expected = """
                 {
-                    "id": "999",
+                    "id": "$NODE_ID_USER_999",
                     "name": "テスト"
                 }
         """.trimIndent()
@@ -197,7 +206,7 @@ class UserGraphQlControllerTest {
 
         val document = """
             mutation {
-                updateUser(input: { id: "100", name: "更新後の名前" }) {
+                updateUser(input: { id: "$NODE_ID_USER_100", name: "更新後の名前" }) {
                     id
                     name
                 }
@@ -206,7 +215,7 @@ class UserGraphQlControllerTest {
 
         val expected = """
                 {
-                    "id": "100",
+                    "id": "$NODE_ID_USER_100",
                     "name": "更新後の名前"
                 }
         """.trimIndent()
@@ -221,7 +230,7 @@ class UserGraphQlControllerTest {
 
         val document = """
             mutation {
-                updateUser(input: { id: "100", name: "更新後の名前" }) {
+                updateUser(input: { id: "$NODE_ID_USER_100", name: "更新後の名前" }) {
                     id
                     name
                 }
@@ -245,13 +254,13 @@ class UserGraphQlControllerTest {
 
         val document = """
             mutation {
-                deleteUser(id: "100")
+                deleteUser(id: "$NODE_ID_USER_100")
             }
         """.trimIndent()
 
         graphQlTester
             .document(document).execute()
-            .path("deleteUser").entity(String::class.java).isEqualTo("100")
+            .path("deleteUser").entity(String::class.java).isEqualTo(NODE_ID_USER_100)
     }
 
     @Test
@@ -260,7 +269,7 @@ class UserGraphQlControllerTest {
 
         val document = """
             mutation {
-                deleteUser(id: "100")
+                deleteUser(id: "$NODE_ID_USER_100")
             }
         """.trimIndent()
 

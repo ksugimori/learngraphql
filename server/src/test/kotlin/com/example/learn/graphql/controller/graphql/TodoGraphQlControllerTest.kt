@@ -19,6 +19,14 @@ import kotlin.test.assertEquals
 @GraphQlTest(TodoGraphQlController::class)
 @Import(GraphQlExceptionResolver::class)
 class TodoGraphQlControllerTest {
+    companion object {
+        val NODEID_TODO_1 = "VG9kbzox" // Base64.encode("Todo:1")
+        val NODEID_TODO_2 = "VG9kbzoy" // Base64.encode("Todo:2")
+        val NODEID_TODO_100 = "VG9kbzoxMDA=" // Base64.encode("Todo:100")
+        val NODEID_TODO_111 = "VG9kbzoxMTE=" // Base64.encode("Todo:111")
+        val NODEID_TODO_999 = "VG9kbzo5OTk=" // Base64.encode("Todo:999")
+    }
+
     @Autowired
     private lateinit var graphQlTester: GraphQlTester
 
@@ -28,7 +36,7 @@ class TodoGraphQlControllerTest {
     @Test
     fun `query - todo`() {
         every { todoRepository.findByIdOrNull(eq(1)) } returns Todo(
-            id = 999,
+            id = 1,
             userId = 1,
             title = "かいもの",
             isCompleted = true,
@@ -36,7 +44,7 @@ class TodoGraphQlControllerTest {
 
         val document = """
             query {
-                todo(id: "1") {
+                todo(id: "$NODEID_TODO_1") {
                     id
                     userId
                     title
@@ -45,10 +53,9 @@ class TodoGraphQlControllerTest {
             }
         """.trimIndent()
 
-        // NOTE: ID 型は必ず String としてシリアライズされる。ID が必ず String なのは GraphQL の 仕様。
         val expected = """
             {
-                "id": "999",
+                "id": "$NODEID_TODO_1",
                 "userId": "1",
                 "title": "かいもの",
                 "isCompleted": true
@@ -81,13 +88,13 @@ class TodoGraphQlControllerTest {
         val expected = """
             [
                 {
-                    "id": "1",
+                    "id": "$NODEID_TODO_1",
                     "userId": "100",
                     "title": "ひとつめ",
                     "isCompleted": true
                 },
                 {
-                    "id": "2",
+                    "id": "$NODEID_TODO_2",
                     "userId": "100",
                     "title": "ふたつめ",
                     "isCompleted": false
@@ -121,7 +128,7 @@ class TodoGraphQlControllerTest {
 
         val expected = """
             {
-                "id": "999",
+                "id": "$NODEID_TODO_999",
                 "userId": "111",
                 "title": "テスト",
                 "isCompleted": false
@@ -146,7 +153,7 @@ class TodoGraphQlControllerTest {
         val document = """
             mutation {
                 updateTodo(input: {
-                    id: "100",
+                    id: "$NODEID_TODO_100",
                     title: "更新後タイトル",
                     isCompleted: true
                 }) {
@@ -160,7 +167,7 @@ class TodoGraphQlControllerTest {
 
         val expected = """
             {
-                "id": "100",
+                "id": "$NODEID_TODO_100",
                 "userId": "222",
                 "title": "更新後タイトル",
                 "isCompleted": true
@@ -179,7 +186,7 @@ class TodoGraphQlControllerTest {
         val document = """
             mutation {
                 updateTodo(input: {
-                    id: "100",
+                    id: "$NODEID_TODO_100",
                     title: "更新後タイトル",
                     isCompleted: true
                 }) {
@@ -208,13 +215,13 @@ class TodoGraphQlControllerTest {
 
         val document = """
             mutation {
-                deleteTodo(id: "100")
+                deleteTodo(id: "$NODEID_TODO_100")
             }
         """.trimIndent()
 
         graphQlTester
             .document(document).execute()
-            .path("deleteTodo").entity(String::class.java).isEqualTo("100")
+            .path("deleteTodo").entity(String::class.java).isEqualTo(NODEID_TODO_100)
     }
 
     @Test
@@ -223,7 +230,7 @@ class TodoGraphQlControllerTest {
 
         val document = """
             mutation {
-                deleteTodo(id: "100")
+                deleteTodo(id: "$NODEID_TODO_100")
             }
         """.trimIndent()
 

@@ -1,0 +1,14 @@
+package com.example.learn.graphql.response
+
+import com.example.learn.graphql.controller.graphql.NodeId
+
+/**
+ * GraphQL の Node インターフェース。
+ */
+interface Node {
+    /**
+     * Node の一意な ID。
+     * これは、Relay の仕様に従い、グローバルに一意な識別子として使用されます。
+     */
+    val id: NodeId
+}

@@ -3,10 +3,11 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
-import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
+import com.example.learn.graphql.response.TodoResponse
+import com.example.learn.graphql.response.UserResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -18,8 +19,8 @@ import org.springframework.stereotype.Controller
 class UserGraphQlController(private val userRepository: UserRepository, private val todoRepository: TodoRepository) {
 
     @QueryMapping
-    fun users(): List<User> {
-        return userRepository.findAll()
+    fun users(): List<UserResponse> {
+        return userRepository.findAll().map { UserResponse.from(it) }
     }
 
     /**
@@ -28,8 +29,9 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      * [org.springframework.graphql.data.method.annotation.QueryMapping] でクエリを処理するメソッドを紐づけ。引数は [org.springframework.graphql.data.method.annotation.Argument] でマッピング
      */
     @QueryMapping
-    fun user(@Argument id: Long): User? {
-        return userRepository.findByIdOrNull(id)
+    fun user(@Argument id: String): UserResponse? {
+        val userId = NodeId(id).asLong()
+        return userRepository.findByIdOrNull(userId)?.let { UserResponse.from(it) }
     }
 
     /**
@@ -56,29 +58,33 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      * 引数の型とメソッド名で自動的にマッピングされるので typeName と field は省略可能。
      */
     @SchemaMapping(typeName = "User", field = "todos")
-    fun todos(parent: User): List<Todo> {
+    fun todos(parent: UserResponse): List<TodoResponse> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        return todoRepository.findByUserId(parent.id)
+        val userId = NodeId(parent.id).asLong()
+        return todoRepository.findByUserId(userId).map { TodoResponse.from(it) }
     }
 
     @MutationMapping
-    fun createUser(@Argument input: CreateUserInput): User {
+    fun createUser(@Argument input: CreateUserInput): UserResponse {
         val user = User(id = null, name = input.name)
-        return userRepository.save(user)
+        return userRepository.save(user).let { UserResponse.from(it) }
     }
 
     @MutationMapping
-    fun updateUser(@Argument input: UpdateUserInput): User {
-        val user = userRepository.findByIdOrNull(input.id)
-            ?: throw NotFoundException(message = "User with id ${input.id} not found")
-        return userRepository.save(user.updatedWith(input))
+    fun updateUser(@Argument input: UpdateUserInput): UserResponse {
+        val userId = NodeId(input.id).asLong()
+        val user = userRepository.findByIdOrNull(userId)
+            ?: throw NotFoundException(message = "User with id $userId not found")
+        return userRepository.save(user.updatedWith(input)).let { UserResponse.from(it) }
     }
 
     @MutationMapping
-    fun deleteUser(@Argument id: Long): Long? {
-        if (userRepository.existsById(id).not()) return null
+    fun deleteUser(@Argument id: String): String? {
+        val userId = NodeId(id).asLong()
 
-        userRepository.deleteById(id)
+        if (userRepository.existsById(userId).not()) return null
+        userRepository.deleteById(userId)
+
         return id
     }
 }
