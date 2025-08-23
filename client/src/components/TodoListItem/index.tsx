@@ -24,10 +24,10 @@ const updateMutation = graphql`
 
 type Props = {
   todoRef: TodoListItem_todo$key;
-  reloadTodoList: () => void;
+  onChange: () => void;
 };
 
-export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
+export const TodoListItem: React.FC<Props> = ({ todoRef, onChange }) => {
   const {
     id,
     title,
@@ -50,14 +50,14 @@ export const TodoListItem: React.FC<Props> = ({ todoRef, reloadTodoList }) => {
 
   const handleDelete = () => {
     commitDelete({ variables: { id } });
-    reloadTodoList();
+    onChange();
   };
 
   const handleComplete = () => {
     commitUpdate({
       variables: { input: { id, isCompleted: true } },
     });
-    reloadTodoList();
+    onChange();
   };
 
   return (

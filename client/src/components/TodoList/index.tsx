@@ -9,14 +9,10 @@ import { TodoListItem } from "@/components/TodoListItem";
 
 type Props = {
   todosRef: TodoListFragment$key;
-  reloadTodoList: () => void;
+  onChange: () => void;
 } & React.ComponentPropsWithoutRef<"ul">;
 
-export const TodoList: React.FC<Props> = ({
-  todosRef,
-  reloadTodoList,
-  ...rest
-}) => {
+export const TodoList: React.FC<Props> = ({ todosRef, onChange, ...rest }) => {
   const { todos } = useFragment(
     graphql`
       fragment TodoListFragment on User {
@@ -33,7 +29,7 @@ export const TodoList: React.FC<Props> = ({
     <ul className={styles.root} {...rest}>
       {todos.map((todoRef) => (
         <li key={todoRef.id}>
-          <TodoListItem todoRef={todoRef} reloadTodoList={reloadTodoList} />
+          <TodoListItem todoRef={todoRef} onChange={onChange} />
         </li>
       ))}
     </ul>
