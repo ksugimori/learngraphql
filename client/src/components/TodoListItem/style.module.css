@@ -1,4 +1,11 @@
 .buttons {
   display: flex;
   gap: 0.5em;
+
+  button:disabled {
+    background-color: #eee;
+    border-color: #eee;
+    color: #999;
+    cursor: auto;
+  }
 }

@@ -40,6 +40,7 @@ export const CreateUserPage: React.FC = () => {
           placeholder="name"
           aria-label="name-input"
           required
+          autoComplete="off"
         />
         <button type="submit">Submit</button>
       </form>

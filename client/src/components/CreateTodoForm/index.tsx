@@ -44,7 +44,13 @@ export const CreateTodoForm: React.FC<Props> = ({ userId, onComplete }) => {
 
   return (
     <form className={styles.root} onSubmit={handleSubmit}>
-      <input type="text" placeholder="title" name="title" required />
+      <input
+        type="text"
+        placeholder="title"
+        name="title"
+        required
+        autoComplete="off"
+      />
       <button>Submit</button>
     </form>
   );
