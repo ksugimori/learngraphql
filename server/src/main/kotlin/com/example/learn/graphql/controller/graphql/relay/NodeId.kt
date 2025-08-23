@@ -1,4 +1,4 @@
-package com.example.learn.graphql.controller.graphql
+package com.example.learn.graphql.controller.graphql.relay
 
 @JvmInline
 value class NodeId(val value: String) {

@@ -1,6 +1,6 @@
-package com.example.learn.graphql.response
+package com.example.learn.graphql.controller.graphql.relay.response
 
-import com.example.learn.graphql.controller.graphql.encodeBase64
+import com.example.learn.graphql.controller.graphql.relay.encodeBase64
 import com.example.learn.graphql.entity.User
 
 data class UserResponse(val id: String, val name: String) {

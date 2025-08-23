@@ -1,6 +1,7 @@
-package com.example.learn.graphql.response
+package com.example.learn.graphql.controller.graphql.relay.response
 
-import com.example.learn.graphql.controller.graphql.NodeId
+import com.example.learn.graphql.controller.graphql.relay.Node
+import com.example.learn.graphql.controller.graphql.relay.NodeId
 import com.example.learn.graphql.entity.Todo
 
 data class TodoResponse(

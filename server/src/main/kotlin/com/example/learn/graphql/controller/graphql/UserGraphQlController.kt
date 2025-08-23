@@ -3,11 +3,12 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
+import com.example.learn.graphql.controller.graphql.relay.NodeId
+import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
+import com.example.learn.graphql.controller.graphql.relay.response.UserResponse
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
-import com.example.learn.graphql.response.TodoResponse
-import com.example.learn.graphql.response.UserResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping

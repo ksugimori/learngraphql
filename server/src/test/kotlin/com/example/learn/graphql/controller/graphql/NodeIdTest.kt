@@ -1,5 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
+import com.example.learn.graphql.controller.graphql.relay.NodeId
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals

@@ -1,6 +1,4 @@
-package com.example.learn.graphql.response
-
-import com.example.learn.graphql.controller.graphql.NodeId
+package com.example.learn.graphql.controller.graphql.relay
 
 /**
  * GraphQL の Node インターフェース。
