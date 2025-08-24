@@ -3,3 +3,4 @@ ktlint_code_style = intellij_idea
 
 [*.kt]
 ktlint_standard_function-expression-body = disabled
+insert_final_newline = true
