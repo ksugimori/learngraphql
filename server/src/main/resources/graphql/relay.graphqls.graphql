@@ -1,0 +1,14 @@
+extend type Query  {
+    node(id: ID!): Node
+}
+
+"""
+Relay 準拠のノードインターフェース
+"""
+interface Node {
+    """
+    ノードの一意な ID。
+    これは、Relay の仕様に従い、グローバルに一意な識別子として使用されます。
+    """
+    id: ID!
+}
