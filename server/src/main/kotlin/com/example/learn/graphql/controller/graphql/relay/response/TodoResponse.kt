@@ -1,7 +1,7 @@
 package com.example.learn.graphql.controller.graphql.relay.response
 
 import com.example.learn.graphql.controller.graphql.relay.Node
-import com.example.learn.graphql.controller.graphql.relay.encodeBase64
+import com.example.learn.graphql.controller.graphql.relay.toNodeId
 import com.example.learn.graphql.entity.Todo
 
 data class TodoResponse(
@@ -14,11 +14,13 @@ data class TodoResponse(
         /**
          * [Todo] エンティティを [TodoResponse] に変換する。
          */
-        fun from(todo: Todo): TodoResponse = TodoResponse(
-            id = "Todo:${todo.id}".encodeBase64(),
-            userId = todo.userId,
-            title = todo.title,
-            isCompleted = todo.isCompleted,
-        )
+        fun from(todo: Todo): TodoResponse {
+            return TodoResponse(
+                id = todo.id.toNodeId("Todo"),
+                userId = todo.userId,
+                title = todo.title,
+                isCompleted = todo.isCompleted,
+            )
+        }
     }
 }

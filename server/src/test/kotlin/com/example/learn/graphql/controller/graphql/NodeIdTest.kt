@@ -1,6 +1,6 @@
 package com.example.learn.graphql.controller.graphql
 
-import com.example.learn.graphql.controller.graphql.relay.NodeId
+import com.example.learn.graphql.controller.graphql.relay.toNodeId
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
@@ -19,7 +19,6 @@ class NodeIdTest {
         "Todo, 999999, VG9kbzo5OTk5OTk=", // Todo:999999
     )
     fun `constructor - 正常系`(type: String, id: Long, expected: String) {
-        val nodeId = NodeId(type, id)
-        assertEquals(expected, nodeId.value)
+        assertEquals(expected, id.toNodeId(type))
     }
 }

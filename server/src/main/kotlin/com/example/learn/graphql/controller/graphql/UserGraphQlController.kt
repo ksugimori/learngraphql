@@ -3,7 +3,7 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
-import com.example.learn.graphql.controller.graphql.relay.NodeId
+import com.example.learn.graphql.controller.graphql.relay.decodeNodeIdAsLong
 import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
 import com.example.learn.graphql.controller.graphql.relay.response.UserResponse
 import com.example.learn.graphql.entity.User
@@ -31,7 +31,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      */
     @QueryMapping
     fun user(@Argument id: String): UserResponse? {
-        val userId = NodeId(id).asLong()
+        val userId = id.decodeNodeIdAsLong()
         return userRepository.findByIdOrNull(userId)?.let { UserResponse.from(it) }
     }
 
@@ -61,7 +61,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     @SchemaMapping(typeName = "User", field = "todos")
     fun todos(parent: UserResponse): List<TodoResponse> {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        val userId = NodeId(parent.id).asLong()
+        val userId = parent.id.decodeNodeIdAsLong()
         return todoRepository.findByUserId(userId).map { TodoResponse.from(it) }
     }
 
@@ -73,7 +73,7 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
 
     @MutationMapping
     fun updateUser(@Argument input: UpdateUserInput): UserResponse {
-        val userId = NodeId(input.id).asLong()
+        val userId = input.id.decodeNodeIdAsLong()
         val user = userRepository.findByIdOrNull(userId)
             ?: throw NotFoundException(message = "User with id $userId not found")
         return userRepository.save(user.updatedWith(input)).let { UserResponse.from(it) }
@@ -81,11 +81,13 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
 
     @MutationMapping
     fun deleteUser(@Argument id: String): String? {
-        val userId = NodeId(id).asLong()
+        val userId = id.decodeNodeIdAsLong()
 
-        if (userRepository.existsById(userId).not()) return null
+        if (!userRepository.existsById(userId)) {
+            return null
+        }
+
         userRepository.deleteById(userId)
-
         return id
     }
 }

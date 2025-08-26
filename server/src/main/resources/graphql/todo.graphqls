@@ -5,7 +5,7 @@ type Todo implements Node {
     id: ID!
 
     "ユーザーID"
-    userId: String!
+    userId: ID!
 
     "タイトル"
     title: String!

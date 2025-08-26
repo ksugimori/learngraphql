@@ -1,16 +1,15 @@
 package com.example.learn.graphql.controller.graphql.relay.response
 
 import com.example.learn.graphql.controller.graphql.relay.Node
-import com.example.learn.graphql.controller.graphql.relay.encodeBase64
+import com.example.learn.graphql.controller.graphql.relay.toNodeId
+
 import com.example.learn.graphql.entity.User
 
 data class UserResponse(override val id: String, val name: String) : Node {
     companion object {
         fun from(user: User): UserResponse {
-            val userId = requireNotNull(user.id) { "user.id is null!!" }
-
             return UserResponse(
-                id = "User:$userId".encodeBase64(),
+                id = user.id.toNodeId("User"),
                 name = user.name,
             )
         }

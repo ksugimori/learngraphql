@@ -13,9 +13,9 @@ class NodeGraphQlController(
 ) {
     @QueryMapping
     fun node(@Argument id: String): Node? {
-        val nodeId = NodeId(id)
+        val (typeName, _) = id.decodeNodeId()
 
-        return when (nodeId.typeName) {
+        return when (typeName) {
             "User" -> userGraphQlController.user(id)
             "Todo" -> todoGraphQlController.todo(id)
             else -> null

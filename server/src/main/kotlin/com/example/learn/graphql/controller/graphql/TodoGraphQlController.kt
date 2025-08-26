@@ -3,7 +3,7 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateTodoInput
 import com.example.learn.graphql.controller.graphql.input.UpdateTodoInput
-import com.example.learn.graphql.controller.graphql.relay.NodeId
+import com.example.learn.graphql.controller.graphql.relay.decodeNodeIdAsLong
 import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
@@ -22,7 +22,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
 
     @QueryMapping
     fun todo(@Argument id: String): TodoResponse? {
-        val todoId = NodeId(id).asLong()
+        val todoId = id.decodeNodeIdAsLong()
         return todoRepository.findByIdOrNull(todoId)?.let { TodoResponse.from(it) }
     }
 
@@ -30,7 +30,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     fun createTodo(@Argument input: CreateTodoInput): TodoResponse {
         val todo = Todo(
             id = null,
-            userId = NodeId(input.userId).asLong(),
+            userId = input.userId.decodeNodeIdAsLong(),
             title = input.title,
             isCompleted = false, // 新規登録時は必ず false
         )
@@ -42,7 +42,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
 
     @MutationMapping
     fun updateTodo(@Argument input: UpdateTodoInput): TodoResponse {
-        val todoId = NodeId(input.id).asLong()
+        val todoId = input.id.decodeNodeIdAsLong()
         val todo = todoRepository.findByIdOrNull(todoId)
             ?: throw NotFoundException("Todo with id $todoId not found")
         val updated = todo.updatedWith(input)
@@ -53,7 +53,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
 
     @MutationMapping
     fun deleteTodo(@Argument id: String): String? {
-        val todoId = NodeId(id).asLong()
+        val todoId = id.decodeNodeIdAsLong()
         if (todoRepository.existsById(todoId).not()) return null
 
         todoRepository.deleteById(todoId)
