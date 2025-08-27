@@ -3,14 +3,14 @@ package com.example.learn.graphql.controller.graphql.relay
 import java.util.*
 
 /**
- * 文字列を Base64 エンコードする。
+ * 文字列を URL Safe Base64 エンコードする。
  */
-private fun String.encodeBase64(): String = Base64.getEncoder().encodeToString(this.toByteArray())
+private fun String.encodeBase64(): String = Base64.getUrlEncoder().encodeToString(this.toByteArray())
 
 /**
- * Base64 エンコードされた文字列をデコードする。
+ * URL Safe Base64 エンコードされた文字列をデコードする。
  */
-private fun String.decodeBase64(): String = String(Base64.getDecoder().decode(this))
+private fun String.decodeBase64(): String = String(Base64.getUrlDecoder().decode(this))
 
 /**
  * Relay の Node ID を生成する。
