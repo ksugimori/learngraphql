@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+if git diff --cached --name-only | grep -q "^server/"; then
+    echo "Server files changed, running checks..."
+    
+    # Kotlinコードのlintチェック
+    (cd server && ./gradlew ktlintCheck) || {
+      echo "❌ ktlintCheck failed!"
+      exit 1
+    }
+    
+    # テスト実行
+    (cd server && ./gradlew test) || {
+      echo "❌ test failed!"
+      exit 1
+    }
+    
+    echo "Server checks completed successfully!"
+else
+    echo "No server files changed, skipping checks."
+fi
