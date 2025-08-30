@@ -1,6 +1,6 @@
 # GraphQL 学習用リポジトリ
 
-Spring for GraphQL を使って GraphQL の学習をするためのリポジトリ。
+Spring for GraphQL + React, Relay を使って GraphQL の学習をするためのリポジトリ。
 
 ## アプリ概要
 
@@ -33,17 +33,21 @@ erDiagram
 実装は [src/main/kotlin/com/example/learn/graphql/controller](src/main/kotlin/com/example/learn/graphql/controller)
 ディレクトリ。
 
-### 使用ライブラリ
-
-- Spring Boot
-- Spring for GraphQL
-- Spring Data JPA
-- H2 Database
-
 ## 起動方法
 
+GraphQL サーバーを起動する。
+
 ```bash
+cd server
 ./gradlew bootRun
 ```
 
-起動後に http://localhost:8080/ から Swagger UI と GraphiQL へ遷移できます。
+React アプリケーションを起動する。
+
+```bash
+cd server
+./gradlew bootRun
+```
+
+起動後に http://localhost:5173/ でアプリケーションにアクセスできる。
+http://localhost:8080/ から Swagger UI と GraphiQL へのリンクもあります。
