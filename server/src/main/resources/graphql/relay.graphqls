@@ -12,3 +12,29 @@ interface Node {
     """
     id: ID!
 }
+
+"""
+Relay 準拠のコネクションインターフェース
+"""
+interface Connection {
+    edges: [Edge]
+    pageInfo: PageInfo!
+}
+
+"""
+Relay 準拠のエッジインターフェース
+"""
+interface Edge {
+    cursor: String!
+    node: Node!
+}
+
+"""
+Relay 準拠のページ情報
+"""
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
+    endCursor: String
+}

@@ -3,10 +3,15 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateTodoInput
 import com.example.learn.graphql.controller.graphql.input.UpdateTodoInput
+import com.example.learn.graphql.controller.graphql.relay.connection.Edge
+import com.example.learn.graphql.controller.graphql.relay.connection.PageInfo
 import com.example.learn.graphql.controller.graphql.relay.decodeNodeIdAsLong
+import com.example.learn.graphql.controller.graphql.relay.response.TodoConnection
 import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
+import com.example.learn.graphql.controller.graphql.relay.toNodeId
 import com.example.learn.graphql.entity.Todo
 import com.example.learn.graphql.repository.TodoRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -18,6 +23,26 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     @QueryMapping
     fun todos(): List<TodoResponse> {
         return todoRepository.findAll().map { TodoResponse.from(it) }
+    }
+
+    @QueryMapping
+    fun todosConnection(@Argument first: Int, @Argument after: String): TodoConnection {
+        val startId = after.decodeNodeIdAsLong()
+
+        val page = todoRepository
+            .findByIdGreaterThanOrderByIdDesc(startId, Pageable.ofSize(first))
+            .map { TodoResponse.from(it) }
+
+        return TodoConnection(
+            totalCount = page.totalElements.toInt(),
+            edges = page.toList().map { Edge.of(it) },
+            pageInfo = PageInfo(
+                hasNextPage = page.hasPrevious(),
+                hasPreviousPage = page.hasNext(),
+                startCursor = page.first().id.toNodeId("Todo"),
+                endCursor = page.last().id.toNodeId("Todo"),
+            ),
+        )
     }
 
     @QueryMapping
@@ -43,8 +68,7 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
     @MutationMapping
     fun updateTodo(@Argument input: UpdateTodoInput): TodoResponse {
         val todoId = input.id.decodeNodeIdAsLong()
-        val todo = todoRepository.findByIdOrNull(todoId)
-            ?: throw NotFoundException("Todo with id $todoId not found")
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw NotFoundException("Todo with id $todoId not found")
         val updated = todo.updatedWith(input)
         todoRepository.save(updated)
 

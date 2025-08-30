@@ -52,6 +52,11 @@ extend type Query {
     todos: [Todo!]!
 
     """
+    Todo の一覧を Relay スタイルで取得する。
+    """
+    todosConnection(first: Int!, after: String): TodoConnection!
+
+    """
     Todo を取得する。
     """
     todo(id: ID!): Todo
@@ -74,4 +79,15 @@ extend type Mutation {
     削除に成功した場合はそのID、失敗した場合はnullを返す。
     """
     deleteTodo(id: ID!): ID
+}
+
+type TodoConnection implements Connection {
+    totalCount: Int!
+    edges: [TodoEdge!]!
+    pageInfo: PageInfo!
+}
+
+type TodoEdge implements Edge {
+    cursor: String!
+    node: Todo!
 }
