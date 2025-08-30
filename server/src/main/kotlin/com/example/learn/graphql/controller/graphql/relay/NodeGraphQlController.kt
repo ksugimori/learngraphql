@@ -13,7 +13,11 @@ class NodeGraphQlController(
 ) {
     @QueryMapping
     fun node(@Argument id: String): Node? {
-        val (typeName, _) = id.decodeNodeId()
+        val (typeName, _) = try {
+            id.decodeNodeId()
+        } catch (e: IllegalArgumentException) {
+            return null
+        }
 
         return when (typeName) {
             "User" -> userGraphQlController.user(id)
