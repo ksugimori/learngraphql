@@ -7,8 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface TodoRepository : JpaRepository<Todo, Long> {
     fun findByUserId(userId: Long): List<Todo>
+
     fun findByIdGreaterThanOrderByIdDesc(
-        startId: Long,
+        startId: Long?,
+        pageable: Pageable,
+    ): Page<Todo>
+
+    fun findByUserIdAndIdGreaterThanOrderByIdDesc(
+        userId: Long,
+        startId: Long?,
         pageable: Pageable,
     ): Page<Todo>
 }

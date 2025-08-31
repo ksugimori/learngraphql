@@ -21,21 +21,17 @@ import org.springframework.stereotype.Controller
 @Controller
 class TodoGraphQlController(private val todoRepository: TodoRepository) {
     @QueryMapping
-    fun todos(): List<TodoResponse> {
-        return todoRepository.findAll().map { TodoResponse.from(it) }
-    }
-
-    @QueryMapping
-    fun todosConnection(@Argument first: Int, @Argument after: String): TodoConnection {
-        val startId = after.decodeNodeIdAsLong()
-
+    fun todos(@Argument first: Int, @Argument after: String?): TodoConnection {
         val page = todoRepository
-            .findByIdGreaterThanOrderByIdDesc(startId, Pageable.ofSize(first))
+            .findByIdGreaterThanOrderByIdDesc(
+                startId = after?.decodeNodeIdAsLong(),
+                pageable = Pageable.ofSize(first),
+            )
             .map { TodoResponse.from(it) }
 
         return TodoConnection(
             totalCount = page.totalElements.toInt(),
-            edges = page.toList().map { Edge.of(it) },
+            edges = page.map { Edge.of(it) }.toList(),
             pageInfo = PageInfo(
                 hasNextPage = page.hasPrevious(),
                 hasPreviousPage = page.hasNext(),

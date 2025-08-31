@@ -47,14 +47,9 @@ input UpdateTodoInput {
 
 extend type Query {
     """
-    Todo の一覧を取得する。
-    """
-    todos: [Todo!]!
-
-    """
     Todo の一覧を Relay スタイルで取得する。
     """
-    todosConnection(first: Int!, after: String): TodoConnection!
+    todos(first: Int!, after: String): TodoConnection!
 
     """
     Todo を取得する。

@@ -11,6 +11,7 @@ import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.context.annotation.Import
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.test.tester.GraphQlTester
 import kotlin.test.Test
@@ -69,37 +70,49 @@ class TodoGraphQlControllerTest {
 
     @Test
     fun `query - todos`() {
-        every { todoRepository.findAll() } returns listOf(
-            Todo(id = 1, userId = 100, title = "ひとつめ", isCompleted = true),
-            Todo(id = 2, userId = 100, title = "ふたつめ", isCompleted = false),
+        every { todoRepository.findByIdGreaterThanOrderByIdDesc(any(), any()) } returns PageImpl(
+            listOf(
+                Todo(id = 1, userId = 100, title = "ひとつめ", isCompleted = true),
+                Todo(id = 2, userId = 100, title = "ふたつめ", isCompleted = false),
+            ),
         )
 
         val document = """
             query {
-                todos {
-                    id
-                    userId
-                    title
-                    isCompleted
+                todos(first: 100) {
+                    edges {
+                        cursor
+                        node {
+                            userId
+                            title
+                            isCompleted
+                        }
+                    }
                 }
             }
         """.trimIndent()
 
         val expected = """
-            [
-                {
-                    "id": "$NODE_ID_TODO_1",
-                    "userId": "100",
-                    "title": "ひとつめ",
-                    "isCompleted": true
-                },
-                {
-                    "id": "$NODE_ID_TODO_2",
-                    "userId": "100",
-                    "title": "ふたつめ",
-                    "isCompleted": false
-                }
-            ]
+            {
+                "edges": [
+                    {
+                        "cursor": "$NODE_ID_TODO_1",
+                        "node": {
+                            "userId": "100",
+                            "title": "ひとつめ",
+                            "isCompleted": true
+                        }
+                    },
+                    {
+                        "cursor": "$NODE_ID_TODO_2",
+                        "node": {
+                            "userId": "100",
+                            "title": "ふたつめ",
+                            "isCompleted": false
+                        }
+                    }
+                ]
+            }
         """.trimIndent()
 
         graphQlTester

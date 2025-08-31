@@ -3,12 +3,17 @@ package com.example.learn.graphql.controller.graphql
 import com.example.learn.graphql.controller.graphql.errors.exception.NotFoundException
 import com.example.learn.graphql.controller.graphql.input.CreateUserInput
 import com.example.learn.graphql.controller.graphql.input.UpdateUserInput
+import com.example.learn.graphql.controller.graphql.relay.connection.Edge
+import com.example.learn.graphql.controller.graphql.relay.connection.PageInfo
 import com.example.learn.graphql.controller.graphql.relay.decodeNodeIdAsLong
+import com.example.learn.graphql.controller.graphql.relay.response.TodoConnection
 import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
 import com.example.learn.graphql.controller.graphql.relay.response.UserResponse
+import com.example.learn.graphql.controller.graphql.relay.toNodeId
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
@@ -59,10 +64,31 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
      * 引数の型とメソッド名で自動的にマッピングされるので typeName と field は省略可能。
      */
     @SchemaMapping(typeName = "User", field = "todos")
-    fun todos(parent: UserResponse): List<TodoResponse> {
+    fun todos(
+        parent: UserResponse,
+        @Argument first: Int,
+        @Argument after: String?,
+    ): TodoConnection {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
-        val userId = parent.id.decodeNodeIdAsLong()
-        return todoRepository.findByUserId(userId).map { TodoResponse.from(it) }
+
+        val page = todoRepository
+            .findByUserIdAndIdGreaterThanOrderByIdDesc(
+                userId = parent.id.decodeNodeIdAsLong(),
+                startId = after?.decodeNodeIdAsLong() ?: 0L,
+                pageable = Pageable.ofSize(first),
+            )
+            .map { TodoResponse.from(it) }
+
+        return TodoConnection(
+            totalCount = page.totalElements.toInt(),
+            edges = page.map { Edge.of(it) }.toList(),
+            pageInfo = PageInfo(
+                hasNextPage = page.hasPrevious(),
+                hasPreviousPage = page.hasNext(),
+                startCursor = page.firstOrNull()?.id?.toNodeId("Todo"),
+                endCursor = page.lastOrNull()?.id?.toNodeId("Todo"),
+            ),
+        )
     }
 
     @MutationMapping

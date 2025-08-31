@@ -13,6 +13,8 @@ import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.graphql.GraphQlTest
 import org.springframework.context.annotation.Import
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.graphql.test.tester.GraphQlTester
 import kotlin.test.Test
@@ -43,17 +45,27 @@ class UserGraphQlControllerTest {
     @Test
     fun `query - user - TODO が紐づかない場合`() {
         every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
-        every { todoRepository.findByUserId(eq(100)) } returns emptyList()
+        every {
+            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+                userId = eq(100),
+                startId = eq(0),
+                pageable = any(),
+            )
+        } returns Page.empty()
 
         val document = """
             query {
                 user(id: "$NODE_ID_USER_100") {
                     id
                     name
-                    todos {
-                        id
-                        title
-                        isCompleted
+                    todos(first: 100) {
+                        edges {
+                            cursor
+                            node {
+                                title
+                                isCompleted
+                            }
+                        }
                     }
                 }
             }
@@ -63,7 +75,9 @@ class UserGraphQlControllerTest {
                 {
                     "id": "$NODE_ID_USER_100",
                     "name": "Test User",
-                    "todos": []
+                    "todos": {
+                        "edges": []
+                    }
                 }
         """.trimIndent()
 
@@ -75,12 +89,20 @@ class UserGraphQlControllerTest {
     @Test
     fun `query - user - TODO が紐づいている場合`() {
         every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
-        every { todoRepository.findByUserId(eq(100)) } returns listOf(
-            Todo(
-                id = 200,
-                userId = 100,
-                title = "test-title",
-                isCompleted = true,
+        every {
+            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+                userId = eq(100),
+                startId = eq(0),
+                pageable = any(),
+            )
+        } returns PageImpl(
+            listOf(
+                Todo(
+                    id = 200,
+                    userId = 100,
+                    title = "test-title",
+                    isCompleted = true,
+                ),
             ),
         )
 
@@ -89,10 +111,14 @@ class UserGraphQlControllerTest {
                 user(id: "$NODE_ID_USER_100") {
                     id
                     name
-                    todos {
-                        id
-                        title
-                        isCompleted
+                    todos(first: 100) {
+                        edges {
+                            cursor
+                            node {
+                                title
+                                isCompleted
+                            }
+                        }
                     }
                 }
             }
@@ -102,13 +128,15 @@ class UserGraphQlControllerTest {
                 {
                     "id": "$NODE_ID_USER_100",
                     "name": "Test User",
-                    "todos": [
-                        {
-                            "id": "$NODE_ID_TODO_200",
-                            "title": "test-title",
-                            "isCompleted": true
-                        }
-                    ]
+                    "todos": {
+                        "edges": [{
+                            "cursor": "$NODE_ID_TODO_200",
+                            "node":{
+                                "title": "test-title",
+                                "isCompleted": true
+                            }
+                        }]
+                    }
                 }
         """.trimIndent()
 
@@ -123,25 +151,43 @@ class UserGraphQlControllerTest {
             User(id = 100, name = "ひとりめ"),
             User(id = 200, name = "ふたりめ"),
         )
-        every { todoRepository.findByUserId(eq(100)) } returns listOf(
-            Todo(
-                id = 999,
-                userId = 100,
-                title = "test-title",
-                isCompleted = true,
+        every {
+            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+                userId = eq(100),
+                startId = eq(0),
+                pageable = any(),
+            )
+        } returns PageImpl(
+            listOf(
+                Todo(
+                    id = 999,
+                    userId = 100,
+                    title = "test-title",
+                    isCompleted = true,
+                ),
             ),
         )
-        every { todoRepository.findByUserId(eq(200)) } returns emptyList()
+        every {
+            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+                userId = eq(200),
+                startId = eq(0),
+                pageable = any(),
+            )
+        } returns Page.empty()
 
         val document = """
             query {
                 users {
                     id
                     name
-                    todos {
-                        id
-                        title
-                        isCompleted
+                    todos(first: 100) {
+                        edges {
+                            cursor
+                            node {
+                                title
+                                isCompleted
+                            }
+                        }
                     }
                 }
             }
@@ -152,18 +198,22 @@ class UserGraphQlControllerTest {
                 {
                     "id": "$NODE_ID_USER_100",
                     "name": "ひとりめ",
-                    "todos": [
-                        {
-                            "id": "$NODE_ID_TODO_999",
-                            "title": "test-title",
-                            "isCompleted": true
-                        }
-                    ]
+                    "todos": {
+                        "edges": [{
+                            "cursor": "$NODE_ID_TODO_999",
+                            "node": {
+                                "title": "test-title",
+                                "isCompleted": true
+                            }
+                        }]
+                    }
                 },
                 {
                     "id": "$NODE_ID_USER_200",
                     "name": "ふたりめ",
-                    "todos": []
+                    "todos": {
+                        "edges": []
+                    }
                 }
             ]
         """.trimIndent()

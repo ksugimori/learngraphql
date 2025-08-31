@@ -8,7 +8,7 @@ type User implements Node {
     name: String!
 
     "タスク一覧"
-    todos: [Todo!]!
+    todos(first: Int!, after: String): TodoConnection!
 }
 
 """
