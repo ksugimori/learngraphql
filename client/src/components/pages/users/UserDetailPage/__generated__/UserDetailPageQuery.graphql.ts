@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<67464a47e625e82f6bf0423b41d88250>>
+ * @generated SignedSource<<1f13b310bdaeb52b3e41423b34786ad0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -98,29 +98,71 @@ return {
           (v2/*: any*/),
           {
             "alias": null,
-            "args": null,
-            "concreteType": "Todo",
+            "args": [
+              {
+                "kind": "Literal",
+                "name": "first",
+                "value": 5
+              }
+            ],
+            "concreteType": "TodoConnection",
             "kind": "LinkedField",
             "name": "todos",
-            "plural": true,
+            "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "title",
+                "name": "totalCount",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "isCompleted",
+                "concreteType": "TodoEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "cursor",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Todo",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v3/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "title",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "isCompleted",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               }
             ],
-            "storageKey": null
+            "storageKey": "todos(first:5)"
           },
           (v3/*: any*/)
         ],
@@ -129,12 +171,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f56c0748f0f0a6a43614bf6c2d67feb3",
+    "cacheID": "fb43c24fde30a58cfe14ff5cd27024c1",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos {\n    id\n    ...TodoListItem_todo\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos(first: 5) {\n    totalCount\n    edges {\n      cursor\n      node {\n        ...TodoListItem_todo\n        id\n      }\n    }\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
   }
 };
 })();

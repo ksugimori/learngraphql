@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2300d957a689aaeb397d2b98a8b5357a>>
+ * @generated SignedSource<<ecce520d6857a5ae60f3803a24add136>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,15 @@
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type TodoListFragment$data = {
-  readonly todos: ReadonlyArray<{
-    readonly id: string;
-    readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
-  }>;
+  readonly todos: {
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
+      };
+    }>;
+    readonly totalCount: number;
+  };
   readonly " $fragmentType": "TodoListFragment";
 };
 export type TodoListFragment$key = {
@@ -30,32 +35,67 @@ const node: ReaderFragment = {
   "selections": [
     {
       "alias": null,
-      "args": null,
-      "concreteType": "Todo",
+      "args": [
+        {
+          "kind": "Literal",
+          "name": "first",
+          "value": 5
+        }
+      ],
+      "concreteType": "TodoConnection",
       "kind": "LinkedField",
       "name": "todos",
-      "plural": true,
+      "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "id",
+          "name": "totalCount",
           "storageKey": null
         },
         {
+          "alias": null,
           "args": null,
-          "kind": "FragmentSpread",
-          "name": "TodoListItem_todo"
+          "concreteType": "TodoEdge",
+          "kind": "LinkedField",
+          "name": "edges",
+          "plural": true,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "Todo",
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
+                {
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "TodoListItem_todo"
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
         }
       ],
-      "storageKey": null
+      "storageKey": "todos(first:5)"
     }
   ],
   "type": "User",
   "abstractKey": null
 };
 
-(node as any).hash = "34fa5b6f3140c66fe280f53d7252ec93";
+(node as any).hash = "8f5592c15884209c1cc3bda168ac328a";
 
 export default node;

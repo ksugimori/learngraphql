@@ -16,9 +16,14 @@ export const TodoList: React.FC<Props> = ({ todosRef, onChange, ...rest }) => {
   const { todos } = useFragment(
     graphql`
       fragment TodoListFragment on User {
-        todos {
-          id
-          ...TodoListItem_todo
+        todos(first: 5) {
+          totalCount
+          edges {
+            cursor
+            node {
+              ...TodoListItem_todo
+            }
+          }
         }
       }
     `,
@@ -27,9 +32,9 @@ export const TodoList: React.FC<Props> = ({ todosRef, onChange, ...rest }) => {
 
   return (
     <ul className={styles.root} {...rest}>
-      {todos.map((todoRef) => (
-        <li key={todoRef.id}>
-          <TodoListItem todoRef={todoRef} onChange={onChange} />
+      {todos.edges.map((todoRef) => (
+        <li key={todoRef.cursor}>
+          <TodoListItem todoRef={todoRef.node} onChange={onChange} />
         </li>
       ))}
     </ul>

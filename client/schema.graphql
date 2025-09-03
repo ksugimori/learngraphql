@@ -21,6 +21,12 @@ This directive disables error propagation when a non nullable field returns null
 """
 directive @experimental_disableErrorPropagation on QUERY | MUTATION | SUBSCRIPTION
 
+"""Relay 準拠のコネクションインターフェース"""
+interface Connection {
+  edges: [Edge]
+  pageInfo: PageInfo!
+}
+
 """
 Todo作成の input 。
 IDは自動採番されるのでそれ以外の項目のみ。
@@ -45,6 +51,12 @@ IDは自動採番されるのでそれ以外の項目のみ。
 """
 input CreateUserInput {
   name: String!
+}
+
+"""Relay 準拠のエッジインターフェース"""
+interface Edge {
+  cursor: String!
+  node: Node!
 }
 
 """更新系処理のルート型"""
@@ -85,10 +97,29 @@ type Mutation {
   deleteUser(id: ID!): ID
 }
 
+"""Relay 準拠のノードインターフェース"""
+interface Node {
+  """
+  ノードの一意な ID。
+  これは、Relay の仕様に従い、グローバルに一意な識別子として使用されます。
+  """
+  id: ID!
+}
+
+"""Relay 準拠のページ情報"""
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
 """参照系処理のルート型"""
 type Query {
-  """Todo の一覧を取得する。"""
-  todos: [Todo!]!
+  node(id: ID!): Node
+
+  """Todo の一覧を Relay スタイルで取得する。"""
+  todos(first: Int!, after: String): TodoConnection!
 
   """Todo を取得する。"""
   todo(id: ID!): Todo
@@ -109,17 +140,28 @@ type Query {
 }
 
 """タスク"""
-type Todo {
+type Todo implements Node {
   id: ID!
 
   """ユーザーID"""
-  userId: String!
+  userId: ID!
 
   """タイトル"""
   title: String!
 
   """完了済か？"""
   isCompleted: Boolean!
+}
+
+type TodoConnection implements Connection {
+  totalCount: Int!
+  edges: [TodoEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TodoEdge implements Edge {
+  cursor: String!
+  node: Todo!
 }
 
 """Todo更新の input"""
@@ -139,13 +181,13 @@ input UpdateUserInput {
 }
 
 """ユーザー"""
-type User {
+type User implements Node {
   id: ID!
 
   """ユーザー名"""
   name: String!
 
   """タスク一覧"""
-  todos: [Todo!]!
+  todos(first: Int!, after: String): TodoConnection!
 }
 
