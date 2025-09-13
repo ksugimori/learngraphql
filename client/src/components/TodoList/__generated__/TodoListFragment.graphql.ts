@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ecce520d6857a5ae60f3803a24add136>>
+ * @generated SignedSource<<7dd144d69cb1057a9e5ec3365365eb96>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,10 @@ export type TodoListFragment$data = {
         readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
       };
     }>;
+    readonly pageInfo: {
+      readonly hasNextPage: boolean;
+      readonly hasPreviousPage: boolean;
+    };
     readonly totalCount: number;
   };
   readonly " $fragmentType": "TodoListFragment";
@@ -52,6 +56,31 @@ const node: ReaderFragment = {
           "args": null,
           "kind": "ScalarField",
           "name": "totalCount",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "PageInfo",
+          "kind": "LinkedField",
+          "name": "pageInfo",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "hasNextPage",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "hasPreviousPage",
+              "storageKey": null
+            }
+          ],
           "storageKey": null
         },
         {
@@ -96,6 +125,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "8f5592c15884209c1cc3bda168ac328a";
+(node as any).hash = "66cae61b2d26e61ce356dbdea6a94353";
 
 export default node;

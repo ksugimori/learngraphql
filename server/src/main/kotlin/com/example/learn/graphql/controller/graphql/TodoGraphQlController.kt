@@ -33,8 +33,8 @@ class TodoGraphQlController(private val todoRepository: TodoRepository) {
             totalCount = page.totalElements.toInt(),
             edges = page.map { Edge.of(it) }.toList(),
             pageInfo = PageInfo(
-                hasNextPage = page.hasPrevious(),
-                hasPreviousPage = page.hasNext(),
+                hasNextPage = page.hasNext(),
+                hasPreviousPage = page.hasPrevious(),
                 startCursor = page.first().id.toNodeId("Todo"),
                 endCursor = page.last().id.toNodeId("Todo"),
             ),

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1f13b310bdaeb52b3e41423b34786ad0>>
+ * @generated SignedSource<<2570da737c7092dbfe20480e3db8cb1d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -120,6 +120,31 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "concreteType": "PageInfo",
+                "kind": "LinkedField",
+                "name": "pageInfo",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "hasNextPage",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "hasPreviousPage",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": "TodoEdge",
                 "kind": "LinkedField",
                 "name": "edges",
@@ -171,12 +196,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "fb43c24fde30a58cfe14ff5cd27024c1",
+    "cacheID": "7d44b7b9116628e3a42566f99d7713c2",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos(first: 5) {\n    totalCount\n    edges {\n      cursor\n      node {\n        ...TodoListItem_todo\n        id\n      }\n    }\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos(first: 5) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    edges {\n      cursor\n      node {\n        ...TodoListItem_todo\n        id\n      }\n    }\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
   }
 };
 })();
