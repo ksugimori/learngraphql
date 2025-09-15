@@ -26,6 +26,11 @@ vi.mock("react-relay", () => ({
   useMutation: vi.fn(),
   useRelayEnvironment: vi.fn(),
   useFragment: vi.fn((_, data) => data),
+  usePaginationFragment: vi.fn((_, data) => {
+    return {
+      data,
+    };
+  }),
   graphql: () => ({}),
 }));
 
@@ -88,7 +93,11 @@ describe("UserDetailPage", () => {
       mockUsePreloadedQuery.mockReturnValue({
         user: {
           name: "Alice",
-          todos: [],
+          todos: {
+            edges: [],
+            totalCount: 0,
+            pageInfo: { hasNextPage: false, hasPreviousPage: false },
+          },
         },
       });
 
@@ -113,10 +122,14 @@ describe("UserDetailPage", () => {
       mockUsePreloadedQuery.mockReturnValue({
         user: {
           name: "Alice",
-          todos: [
-            { id: "1", title: "牛乳を買う", isCompleted: false },
-            { id: "2", title: "掃除", isCompleted: true },
-          ],
+          todos: {
+            edges: [
+              { node: { id: "1", title: "牛乳を買う", isCompleted: false } },
+              { node: { id: "2", title: "掃除", isCompleted: true } },
+            ],
+            totalCount: 2,
+            pageInfo: { hasNextPage: false, hasPreviousPage: false },
+          },
         },
       });
 
