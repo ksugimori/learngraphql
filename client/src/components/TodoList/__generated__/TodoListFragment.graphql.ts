@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7dd144d69cb1057a9e5ec3365365eb96>>
+ * @generated SignedSource<<6dad39d810f54155817e898815c908ba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,11 @@
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type TodoListFragment$data = {
+  readonly id: string;
   readonly todos: {
     readonly edges: ReadonlyArray<{
-      readonly cursor: string;
       readonly node: {
+        readonly id: string;
         readonly " $fragmentSpreads": FragmentRefs<"TodoListItem_todo">;
       };
     }>;
@@ -31,24 +32,69 @@ export type TodoListFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"TodoListFragment">;
 };
 
-const node: ReaderFragment = {
-  "argumentDefinitions": [],
+import TodoListRefetchQuery_graphql from './TodoListRefetchQuery.graphql';
+
+const node: ReaderFragment = (function(){
+var v0 = [
+  "todos"
+],
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
+  "argumentDefinitions": [
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "after"
+    },
+    {
+      "defaultValue": 5,
+      "kind": "LocalArgument",
+      "name": "first"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "connection": [
+      {
+        "count": "first",
+        "cursor": "after",
+        "direction": "forward",
+        "path": (v0/*: any*/)
+      }
+    ],
+    "refetch": {
+      "connection": {
+        "forward": {
+          "count": "first",
+          "cursor": "after"
+        },
+        "backward": null,
+        "path": (v0/*: any*/)
+      },
+      "fragmentPathInResult": [
+        "node"
+      ],
+      "operation": TodoListRefetchQuery_graphql,
+      "identifierInfo": {
+        "identifierField": "id",
+        "identifierQueryVariableName": "id"
+      }
+    }
+  },
   "name": "TodoListFragment",
   "selections": [
     {
-      "alias": null,
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "first",
-          "value": 5
-        }
-      ],
+      "alias": "todos",
+      "args": null,
       "concreteType": "TodoConnection",
       "kind": "LinkedField",
-      "name": "todos",
+      "name": "__TodoList_todos_connection",
       "plural": false,
       "selections": [
         {
@@ -79,6 +125,13 @@ const node: ReaderFragment = {
               "kind": "ScalarField",
               "name": "hasPreviousPage",
               "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "endCursor",
+              "storageKey": null
             }
           ],
           "storageKey": null
@@ -94,37 +147,47 @@ const node: ReaderFragment = {
             {
               "alias": null,
               "args": null,
-              "kind": "ScalarField",
-              "name": "cursor",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
               "concreteType": "Todo",
               "kind": "LinkedField",
               "name": "node",
               "plural": false,
               "selections": [
+                (v1/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "TodoListItem_todo"
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "__typename",
+                  "storageKey": null
                 }
               ],
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
               "storageKey": null
             }
           ],
           "storageKey": null
         }
       ],
-      "storageKey": "todos(first:5)"
-    }
+      "storageKey": null
+    },
+    (v1/*: any*/)
   ],
   "type": "User",
   "abstractKey": null
 };
+})();
 
-(node as any).hash = "66cae61b2d26e61ce356dbdea6a94353";
+(node as any).hash = "221aed27bb8c846cfc3fa351573fa16c";
 
 export default node;

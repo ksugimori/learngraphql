@@ -1,4 +1,4 @@
-import { graphql, useFragment } from "react-relay";
+import { graphql, usePaginationFragment } from "react-relay";
 
 import styles from "./style.module.css";
 import { ListItem } from "../ListItem";
@@ -14,18 +14,23 @@ type Props = {
 } & React.ComponentPropsWithoutRef<"ul">;
 
 export const TodoList: React.FC<Props> = ({ todosRef, onChange, ...rest }) => {
-  const { todos } = useFragment(
+  const { data, loadNext, hasNext, isLoadingNext } = usePaginationFragment(
     graphql`
-      fragment TodoListFragment on User {
-        todos(first: 5) {
+      fragment TodoListFragment on User
+      @refetchable(queryName: "TodoListRefetchQuery")
+      @argumentDefinitions(
+        first: { type: "Int", defaultValue: 5 }
+        after: { type: "String" }
+      ) {
+        todos(first: $first, after: $after) @connection(key: "TodoList_todos") {
           totalCount
           pageInfo {
             hasNextPage
             hasPreviousPage
           }
           edges {
-            cursor
             node {
+              id
               ...TodoListItem_todo
             }
           }
@@ -35,16 +40,30 @@ export const TodoList: React.FC<Props> = ({ todosRef, onChange, ...rest }) => {
     todosRef
   );
 
+  const { todos } = data;
+
+  const handleLoadMore = () => {
+    if (hasNext && !isLoadingNext) {
+      loadNext(5); // 次の5件を読み込み
+    }
+  };
+
   return (
     <ul className={styles.root} {...rest}>
       {todos.edges.map((todoRef) => (
-        <li key={todoRef.cursor}>
+        <li key={todoRef.node.id}>
           <TodoListItem todoRef={todoRef.node} onChange={onChange} />
         </li>
       ))}
       <div className={styles.loadMore}>
-        {todos.pageInfo.hasNextPage ? (
-          <button type="button">Load More...</button>
+        {hasNext ? (
+          <button
+            type="button"
+            onClick={handleLoadMore}
+            disabled={isLoadingNext}
+          >
+            {isLoadingNext ? "Loading..." : "Load More..."}
+          </button>
         ) : (
           <ListItem left="Total" right={`${todos.totalCount} tasks`} />
         )}

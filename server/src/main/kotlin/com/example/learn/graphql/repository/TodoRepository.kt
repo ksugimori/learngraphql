@@ -13,9 +13,11 @@ interface TodoRepository : JpaRepository<Todo, Long> {
         pageable: Pageable,
     ): Page<Todo>
 
-    fun findByUserIdAndIdGreaterThanOrderByIdDesc(
+    fun findByUserIdAndIdLessThanOrderByIdDesc(
         userId: Long,
         startId: Long?,
         pageable: Pageable,
     ): Page<Todo>
+
+    fun countByUserId(userId: Long): Long
 }

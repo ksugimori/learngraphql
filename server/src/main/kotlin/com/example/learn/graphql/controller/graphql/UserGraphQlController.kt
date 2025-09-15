@@ -9,7 +9,6 @@ import com.example.learn.graphql.controller.graphql.relay.decodeNodeIdAsLong
 import com.example.learn.graphql.controller.graphql.relay.response.TodoConnection
 import com.example.learn.graphql.controller.graphql.relay.response.TodoResponse
 import com.example.learn.graphql.controller.graphql.relay.response.UserResponse
-import com.example.learn.graphql.controller.graphql.relay.toNodeId
 import com.example.learn.graphql.entity.User
 import com.example.learn.graphql.repository.TodoRepository
 import com.example.learn.graphql.repository.UserRepository
@@ -71,22 +70,25 @@ class UserGraphQlController(private val userRepository: UserRepository, private 
     ): TodoConnection {
         checkNotNull(parent.id) { "新規登録時以外で null にはならないはず" }
 
+        val userId = parent.id.decodeNodeIdAsLong()
+
+        val totalCount = todoRepository.countByUserId(userId).toInt()
         val page = todoRepository
-            .findByUserIdAndIdGreaterThanOrderByIdDesc(
-                userId = parent.id.decodeNodeIdAsLong(),
-                startId = after?.decodeNodeIdAsLong() ?: 0L,
+            .findByUserIdAndIdLessThanOrderByIdDesc(
+                userId = userId,
+                startId = after?.decodeNodeIdAsLong() ?: Long.MAX_VALUE,
                 pageable = Pageable.ofSize(first),
             )
             .map { TodoResponse.from(it) }
 
         return TodoConnection(
-            totalCount = page.totalElements.toInt(),
+            totalCount = totalCount,
             edges = page.map { Edge.of(it) }.toList(),
             pageInfo = PageInfo(
                 hasNextPage = page.hasNext(),
                 hasPreviousPage = page.hasPrevious(),
-                startCursor = page.firstOrNull()?.id?.toNodeId("Todo"),
-                endCursor = page.lastOrNull()?.id?.toNodeId("Todo"),
+                startCursor = page.firstOrNull()?.id,
+                endCursor = page.lastOrNull()?.id,
             ),
         )
     }

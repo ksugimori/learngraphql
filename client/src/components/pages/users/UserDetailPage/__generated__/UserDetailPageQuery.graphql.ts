@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2570da737c7092dbfe20480e3db8cb1d>>
+ * @generated SignedSource<<2c7872a0d9ec7eec32f7bea7eda34551>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -46,7 +46,14 @@ v2 = {
   "name": "name",
   "storageKey": null
 },
-v3 = {
+v3 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 5
+  }
+],
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -98,13 +105,7 @@ return {
           (v2/*: any*/),
           {
             "alias": null,
-            "args": [
-              {
-                "kind": "Literal",
-                "name": "first",
-                "value": 5
-              }
-            ],
+            "args": (v3/*: any*/),
             "concreteType": "TodoConnection",
             "kind": "LinkedField",
             "name": "todos",
@@ -138,6 +139,13 @@ return {
                     "kind": "ScalarField",
                     "name": "hasPreviousPage",
                     "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "endCursor",
+                    "storageKey": null
                   }
                 ],
                 "storageKey": null
@@ -153,19 +161,12 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "kind": "ScalarField",
-                    "name": "cursor",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
                     "concreteType": "Todo",
                     "kind": "LinkedField",
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/),
+                      (v4/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -179,8 +180,22 @@ return {
                         "kind": "ScalarField",
                         "name": "isCompleted",
                         "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "__typename",
+                        "storageKey": null
                       }
                     ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "cursor",
                     "storageKey": null
                   }
                 ],
@@ -189,19 +204,28 @@ return {
             ],
             "storageKey": "todos(first:5)"
           },
-          (v3/*: any*/)
+          {
+            "alias": null,
+            "args": (v3/*: any*/),
+            "filters": null,
+            "handle": "connection",
+            "key": "TodoList_todos",
+            "kind": "LinkedHandle",
+            "name": "todos"
+          },
+          (v4/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "7d44b7b9116628e3a42566f99d7713c2",
+    "cacheID": "a1956a9c9bfcee149130803634d582fd",
     "id": null,
     "metadata": {},
     "name": "UserDetailPageQuery",
     "operationKind": "query",
-    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos(first: 5) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n    }\n    edges {\n      cursor\n      node {\n        ...TodoListItem_todo\n        id\n      }\n    }\n  }\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
+    "text": "query UserDetailPageQuery(\n  $userId: ID!\n) {\n  user(id: $userId) {\n    name\n    ...TodoListFragment\n    id\n  }\n}\n\nfragment TodoListFragment on User {\n  todos(first: 5) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...TodoListItem_todo\n        __typename\n      }\n      cursor\n    }\n  }\n  id\n}\n\nfragment TodoListItem_todo on Todo {\n  id\n  title\n  isCompleted\n}\n"
   }
 };
 })();

@@ -45,10 +45,11 @@ class UserGraphQlControllerTest {
     @Test
     fun `query - user - TODO が紐づかない場合`() {
         every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
+        every { todoRepository.countByUserId(eq(100)) } returns 0
         every {
-            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+            todoRepository.findByUserIdAndIdLessThanOrderByIdDesc(
                 userId = eq(100),
-                startId = eq(0),
+                startId = eq(Long.MAX_VALUE),
                 pageable = any(),
             )
         } returns Page.empty()
@@ -89,10 +90,11 @@ class UserGraphQlControllerTest {
     @Test
     fun `query - user - TODO が紐づいている場合`() {
         every { userRepository.findByIdOrNull(eq(100)) } returns User(id = 100, name = "Test User")
+        every { todoRepository.countByUserId(eq(100)) } returns 1
         every {
-            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+            todoRepository.findByUserIdAndIdLessThanOrderByIdDesc(
                 userId = eq(100),
-                startId = eq(0),
+                startId = eq(Long.MAX_VALUE),
                 pageable = any(),
             )
         } returns PageImpl(
@@ -151,10 +153,12 @@ class UserGraphQlControllerTest {
             User(id = 100, name = "ひとりめ"),
             User(id = 200, name = "ふたりめ"),
         )
+        every { todoRepository.countByUserId(eq(100)) } returns 1
+        every { todoRepository.countByUserId(eq(200)) } returns 0
         every {
-            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+            todoRepository.findByUserIdAndIdLessThanOrderByIdDesc(
                 userId = eq(100),
-                startId = eq(0),
+                startId = eq(Long.MAX_VALUE),
                 pageable = any(),
             )
         } returns PageImpl(
@@ -168,9 +172,9 @@ class UserGraphQlControllerTest {
             ),
         )
         every {
-            todoRepository.findByUserIdAndIdGreaterThanOrderByIdDesc(
+            todoRepository.findByUserIdAndIdLessThanOrderByIdDesc(
                 userId = eq(200),
-                startId = eq(0),
+                startId = eq(Long.MAX_VALUE),
                 pageable = any(),
             )
         } returns Page.empty()
