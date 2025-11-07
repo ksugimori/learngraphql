@@ -46,7 +46,7 @@ React アプリケーションを起動する。
 
 ```bash
 cd server
-./gradlew bootRun
+npm run dev
 ```
 
 起動後に http://localhost:5173/ でアプリケーションにアクセスできる。
