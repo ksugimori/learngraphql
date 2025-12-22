@@ -30,7 +30,7 @@ erDiagram
 ### API
 
 これらに対する操作を REST API と GraphQL の両方で提供する。
-実装は [src/main/kotlin/com/example/learn/graphql/controller](src/main/kotlin/com/example/learn/graphql/controller)
+実装は [server/src/main/kotlin/com/example/learn/graphql/controller](server/src/main/kotlin/com/example/learn/graphql/controller)
 ディレクトリ。
 
 ## 起動方法
